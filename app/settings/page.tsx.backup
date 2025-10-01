@@ -4,23 +4,19 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import PageLayout from "@/components/PageLayout";
-import { Bell, Loader2, Save, User, Lock, Palette } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { User, Bell, Settings as SettingsIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserProfile } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
 
 export default function SettingsPage() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
-  const { theme: systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,7 +24,6 @@ export default function SettingsPage() {
   const [settingsData, setSettingsData] = useState({
     timezone: "America/Los_Angeles",
     language: "en",
-    theme: "system",
   });
 
   const [notifications, setNotifications] = useState({
@@ -63,7 +58,6 @@ export default function SettingsPage() {
             setSettingsData({
               timezone: data.settings.timezone || "America/Los_Angeles",
               language: data.settings.language || "en",
-              theme: data.settings.theme || "system",
             });
             setNotifications({
               emailNotifications: data.settings.emailNotifications ?? true,
@@ -129,6 +123,13 @@ export default function SettingsPage() {
 
   if (!session?.user) return null;
 
+  const userInitials = profileData.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
     <div className="min-h-screen gradient-mesh">
       <Sidebar />
@@ -163,33 +164,69 @@ export default function SettingsPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* Profile Tab - Clerk UserProfile */}
+            {/* Profile Tab */}
             <TabsContent value="profile">
               <div className="glass-card rounded-2xl p-6 animate-fade-in">
-                <UserProfile 
-                  appearance={{
-                    baseTheme: systemTheme === "dark" ? dark : undefined,
-                    elements: {
-                      rootBox: "w-full",
-                      card: "shadow-none bg-transparent border-0",
-                      navbar: "hidden",
-                      navbarMobileMenuButton: "hidden",
-                      headerTitle: "text-foreground",
-                      headerSubtitle: "text-muted-foreground",
-                      profileSection: "bg-transparent",
-                      profileSectionPrimaryButton: "bg-primary text-primary-foreground hover:bg-primary/90",
-                      formButtonPrimary: "bg-primary text-primary-foreground hover:bg-primary/90",
-                      formFieldInput: "bg-background border-border text-foreground",
-                      formFieldLabel: "text-foreground",
-                      badge: "bg-primary/10 text-primary",
-                      avatarBox: "border-border",
-                      userButtonPopoverCard: "bg-card border-border",
-                      userButtonPopoverActionButton: "text-foreground hover:bg-accent",
-                      userButtonPopoverActionButtonText: "text-foreground",
-                      userButtonPopoverFooter: "hidden",
-                    },
-                  }}
-                />
+                <h2 className="text-2xl font-bold mb-6">Profile Information</h2>
+                
+                <div className="space-y-6">
+                  {/* Avatar */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-chart-2 flex items-center justify-center text-white text-2xl font-bold">
+                      {userInitials || "U"}
+                    </div>
+                    <div>
+                      <Button size="sm" variant="outline" disabled>
+                        Change Avatar
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        JPG, PNG or GIF. Max size 2MB.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Full Name */}
+                  <div>
+                    <Label className="mb-2 block">Full Name</Label>
+                    <Input
+                      value={profileData.name}
+                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      className="glass"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <Label className="mb-2 block">Email Address</Label>
+                    <Input
+                      type="email"
+                      value={profileData.email}
+                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                      className="glass"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    onClick={handleSaveProfile}
+                    disabled={saving}
+                  >
+                    {saving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Changes
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </TabsContent>
 
