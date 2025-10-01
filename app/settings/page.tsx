@@ -20,7 +20,7 @@ import { useTheme } from "next-themes";
 export default function SettingsPage() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
-  const { theme: systemTheme } = useTheme();
+  const { theme: systemTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,7 +28,7 @@ export default function SettingsPage() {
   const [settingsData, setSettingsData] = useState({
     timezone: "America/Los_Angeles",
     language: "en",
-    theme: "system",
+    theme: systemTheme || "system",
   });
 
   const [notifications, setNotifications] = useState({
@@ -41,6 +41,13 @@ export default function SettingsPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Sync theme state with next-themes
+  useEffect(() => {
+    if (systemTheme) {
+      setSettingsData(prev => ({ ...prev, theme: systemTheme }));
+    }
+  }, [systemTheme]);
 
   // Auth check
   useEffect(() => {
@@ -350,22 +357,31 @@ export default function SettingsPage() {
                     <Label className="mb-3 block">Theme</Label>
                     <div className="grid grid-cols-3 gap-4">
                       <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${settingsData.theme === 'light' ? 'ring-2' : ''}`}
-                        onClick={() => setSettingsData({ ...settingsData, theme: 'light' })}
+                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'light' ? 'ring-2' : ''}`}
+                        onClick={() => {
+                          setTheme('light');
+                          setSettingsData({ ...settingsData, theme: 'light' });
+                        }}
                       >
                         <div className="w-full h-20 rounded-lg bg-gradient-to-br from-white to-gray-100 mb-2"></div>
                         <p className="text-sm font-medium">Light</p>
                       </button>
                       <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${settingsData.theme === 'dark' ? 'ring-2' : ''}`}
-                        onClick={() => setSettingsData({ ...settingsData, theme: 'dark' })}
+                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'dark' ? 'ring-2' : ''}`}
+                        onClick={() => {
+                          setTheme('dark');
+                          setSettingsData({ ...settingsData, theme: 'dark' });
+                        }}
                       >
                         <div className="w-full h-20 rounded-lg bg-gradient-to-br from-gray-900 to-black mb-2"></div>
                         <p className="text-sm font-medium">Dark</p>
                       </button>
                       <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${settingsData.theme === 'system' ? 'ring-2' : ''}`}
-                        onClick={() => setSettingsData({ ...settingsData, theme: 'system' })}
+                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'system' ? 'ring-2' : ''}`}
+                        onClick={() => {
+                          setTheme('system');
+                          setSettingsData({ ...settingsData, theme: 'system' });
+                        }}
                       >
                         <div className="w-full h-20 rounded-lg bg-gradient-to-br from-white via-gray-400 to-black mb-2"></div>
                         <p className="text-sm font-medium">System</p>
