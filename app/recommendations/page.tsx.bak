@@ -1,0 +1,303 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Sidebar from "@/components/Sidebar";
+import { Lightbulb, CheckCircle2, Circle, Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+
+type Recommendation = {
+  id: string;
+  recommendationType: string | null;
+  title: string;
+  description: string;
+  priority: string | null;
+  status: string | null;
+};
+
+export default function RecommendationsPage() {
+  const [mounted, setMounted] = useState(false);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterType, setFilterType] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("active");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    async function fetchRecommendations() {
+      try {
+        const response = await fetch("/api/recommendations");
+        if (response.ok) {
+          const data = await response.json();
+          setRecommendations(data.recommendations);
+        }
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+        toast.error("Failed to load recommendations");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (mounted) {
+      fetchRecommendations();
+    }
+  }, [mounted]);
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      const response = await fetch("/api/recommendations", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+
+      if (response.ok) {
+        setRecommendations(recommendations.map(rec => 
+          rec.id === id ? { ...rec, status: newStatus } : rec
+        ));
+        toast.success("Status updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  if (!mounted) return null;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen gradient-mesh">
+        <Sidebar />
+        <main className="lg:ml-72 p-4 lg:p-8">
+          <div className="flex items-center justify-center h-screen">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-4 text-muted-foreground">Loading recommendations...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Filter recommendations
+  const filteredRecommendations = recommendations.filter(rec => {
+    const matchesType = filterType === "all" || rec.recommendationType === filterType;
+    const matchesStatus = filterStatus === "all" || rec.status === filterStatus;
+    return matchesType && matchesStatus;
+  });
+
+  const mockRecommendations = [
+  {
+    id: "1",
+    type: "diet",
+    title: "Adopt Mediterranean Diet Pattern",
+    description: "Transition to a Mediterranean-style diet rich in olive oil, fish, nuts, and vegetables. This eating pattern has been shown to improve sperm quality through its anti-inflammatory properties and high antioxidant content. Focus on omega-3 rich fish 2-3 times per week, daily nuts, and extra virgin olive oil as your primary fat source.",
+    priority: "high",
+    status: "active",
+  },
+  {
+    id: "2",
+    type: "supplements",
+    title: "Antioxidant Supplement Protocol",
+    description: "Begin a targeted antioxidant supplement regimen including Coenzyme Q10 (200mg daily), Vitamin C (1000mg daily), and Vitamin E (400 IU daily). These antioxidants help protect sperm from oxidative stress and DNA damage. Take with meals for optimal absorption and consider cycling every 3 months.",
+    priority: "high",
+    status: "active",
+  },
+  {
+    id: "3",
+    type: "stress",
+    title: "Advanced Stress Management Techniques",
+    description: "Implement a comprehensive stress management protocol including daily meditation (20 minutes), progressive muscle relaxation, and breathing exercises. Consider learning mindfulness-based stress reduction (MBSR) techniques. Chronic stress elevates cortisol levels which can negatively impact sperm production and quality.",
+    priority: "medium",
+    status: "active",
+  },
+  {
+    id: "4",
+    type: "sleep",
+    title: "Optimize Sleep Quality for Hormonal Balance",
+    description: "Focus on sleep quality optimization through consistent sleep schedule, bedroom temperature control (65-68°F), and blue light reduction 2 hours before bed. Quality sleep is crucial for testosterone production and sperm regeneration. Consider blackout curtains and white noise machine for deeper sleep phases.",
+    priority: "high",
+    status: "active",
+  },
+  {
+    id: "5",
+    type: "lifestyle",
+    title: "Heat Exposure Reduction Protocol",
+    description: "Minimize heat exposure to scrotal area by avoiding hot baths, saunas, and tight clothing. Switch to boxer briefs or boxers, avoid laptop on lap, and limit hot tub use. Elevated scrotal temperature can impair sperm production for up to 74 days (full sperm cycle).",
+    priority: "medium",
+    status: "completed",
+  },
+  {
+    id: "6",
+    type: "exercise",
+    title: "Moderate Exercise Optimization",
+    description: "Maintain moderate-intensity exercise 4-5 times per week, focusing on resistance training and cardio balance. Avoid excessive endurance training which can lower testosterone. Include compound movements like squats and deadlifts to naturally boost hormone production.",
+    priority: "medium",
+    status: "active",
+  },
+];
+
+const priorityColors = {
+  critical: "bg-red-500/10 text-red-500 border-red-500/20",
+  high: "bg-orange-500/10 text-orange-500 border-orange-500/20",
+  medium: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+  low: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+};
+
+const typeIcons = {
+  diet: "🥗",
+  supplements: "💊",
+  stress: "🧘",
+  sleep: "😴",
+  lifestyle: "🌟",
+  exercise: "💪",
+};
+
+export default function RecommendationsPage() {
+  const [mounted, setMounted] = useState(false);
+  const [filter, setFilter] = useState<string>("all");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const filteredRecommendations = filter === "all" 
+    ? mockRecommendations 
+    : mockRecommendations.filter(rec => rec.type === filter);
+
+  return (
+    <div className="min-h-screen gradient-mesh">
+      <Sidebar />
+      
+      <main className="lg:ml-72 p-4 lg:p-8">
+        {/* Header */}
+        <div className="mb-8 animate-fade-in">
+          <h1 className="text-4xl font-bold mb-2">Personalized Recommendations</h1>
+          <p className="text-muted-foreground">
+            Evidence-based strategies to improve your health
+          </p>
+        </div>
+
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="glass-card rounded-xl p-4">
+            <p className="text-sm text-muted-foreground mb-1">Total Actions</p>
+            <p className="text-2xl font-bold">{mockRecommendations.length}</p>
+          </div>
+          <div className="glass-card rounded-xl p-4">
+            <p className="text-sm text-muted-foreground mb-1">Active</p>
+            <p className="text-2xl font-bold text-primary">
+              {mockRecommendations.filter(r => r.status === 'active').length}
+            </p>
+          </div>
+          <div className="glass-card rounded-xl p-4">
+            <p className="text-sm text-muted-foreground mb-1">Completed</p>
+            <p className="text-2xl font-bold text-green-500">
+              {mockRecommendations.filter(r => r.status === 'completed').length}
+            </p>
+          </div>
+          <div className="glass-card rounded-xl p-4">
+            <p className="text-sm text-muted-foreground mb-1">High Priority</p>
+            <p className="text-2xl font-bold text-orange-500">
+              {mockRecommendations.filter(r => r.priority === 'high').length}
+            </p>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mb-6">
+          <Tabs defaultValue="all" value={filter} onValueChange={setFilter}>
+            <TabsList className="glass">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="diet">Diet</TabsTrigger>
+              <TabsTrigger value="supplements">Supplements</TabsTrigger>
+              <TabsTrigger value="exercise">Exercise</TabsTrigger>
+              <TabsTrigger value="sleep">Sleep</TabsTrigger>
+              <TabsTrigger value="stress">Stress</TabsTrigger>
+              <TabsTrigger value="lifestyle">Lifestyle</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {/* Recommendations List */}
+        <div className="space-y-4">
+          {filteredRecommendations.map((rec, index) => (
+            <div
+              key={rec.id}
+              className="glass-card rounded-2xl p-6 hover-lift animate-fade-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-4xl">{typeIcons[rec.type as keyof typeof typeIcons]}</div>
+                
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">{rec.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "capitalize",
+                            priorityColors[rec.priority as keyof typeof priorityColors]
+                          )}
+                        >
+                          {rec.priority} priority
+                        </Badge>
+                        <Badge variant="outline" className="capitalize">
+                          {rec.type}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    {rec.status === "completed" ? (
+                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    ) : (
+                      <Circle className="w-6 h-6 text-muted-foreground" />
+                    )}
+                  </div>
+                  
+                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                    {rec.description}
+                  </p>
+                  
+                  <div className="flex gap-3">
+                    <Button size="sm" variant={rec.status === "completed" ? "outline" : "default"}>
+                      {rec.status === "completed" ? "Mark as Active" : "Mark as Completed"}
+                    </Button>
+                    <Button size="sm" variant="outline">
+                      Learn More
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredRecommendations.length === 0 && (
+          <div className="glass-card rounded-2xl p-12 text-center animate-fade-in">
+            <Lightbulb className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No recommendations found</h3>
+            <p className="text-muted-foreground">
+              Try adjusting your filters or check back later for new recommendations
+            </p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
