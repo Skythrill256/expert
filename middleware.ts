@@ -1,6 +1,12 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
+  '/api/share/view(.*)',  // Public endpoint for viewing shared data
+  '/shared(.*)',          // Public shared view pages
+]);
+
 // Define protected routes
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
@@ -13,11 +19,16 @@ const isProtectedRoute = createRouteMatcher([
   '/api/recommendations(.*)',
   '/api/reports(.*)',
   '/api/user(.*)',
-  '/api/share(.*)',
+  '/api/share(.*)',       // Protected: creating/managing share links
   '/api/export(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Allow public routes without authentication
+  if (isPublicRoute(req)) {
+    return NextResponse.next();
+  }
+
   // Protect routes that require authentication
   if (isProtectedRoute(req)) {
     await auth.protect();
