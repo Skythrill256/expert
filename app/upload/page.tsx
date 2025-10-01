@@ -182,10 +182,11 @@ DFI: ${manualData.dfi}%
                       />
                       {/* Custom control row */}
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <label htmlFor="file-upload">
-                          <Button type="button" className="h-10 px-4">
-                            Choose File
-                          </Button>
+                        <label 
+                          htmlFor="file-upload"
+                          className="inline-flex items-center justify-center h-10 px-4 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
+                        >
+                          Choose File
                         </label>
                         <div className="h-10 w-full max-w-md rounded-lg border border-border/50 bg-background/60 backdrop-blur-sm px-4 flex items-center text-sm text-muted-foreground">
                           No file chosen
