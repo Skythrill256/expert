@@ -14,12 +14,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await getOrCreateUser(userId);
+    const user = await getOrCreateUser(userId);
+    const actualUserId = user ? user.id : userId;
 
     const userRecommendations = await db
       .select()
       .from(recommendations)
-      .where(eq(recommendations.userId, userId))
+      .where(eq(recommendations.userId, actualUserId))
       .orderBy(desc(recommendations.createdAt));
 
     return NextResponse.json({ recommendations: userRecommendations });

@@ -2,8 +2,13 @@
 
 import { SignIn } from '@clerk/nextjs';
 import { Activity, Shield } from "lucide-react";
+import { useTheme } from 'next-themes';
+import { dark } from '@clerk/themes';
 
 export default function LoginPage() {
+  const { theme, resolvedTheme } = useTheme();
+  const isDark = theme === 'dark' || resolvedTheme === 'dark';
+
   return (
     <div className="min-h-screen gradient-mesh flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -20,10 +25,18 @@ export default function LoginPage() {
         <div className="flex justify-center">
           <SignIn 
             appearance={{
+              baseTheme: isDark ? dark : undefined,
               elements: {
                 rootBox: "w-full",
                 card: "glass-card rounded-2xl shadow-xl",
-              }
+                headerTitle: "text-foreground",
+                headerSubtitle: "text-muted-foreground",
+                formButtonPrimary: "bg-primary hover:bg-primary/90 text-primary-foreground",
+                formFieldInput: "bg-background border-border text-foreground",
+                footerActionLink: "text-primary hover:text-primary/90",
+                identityPreviewText: "text-foreground",
+                identityPreviewEditButton: "text-muted-foreground hover:text-foreground",
+              },
             }}
             routing="path"
             path="/login"

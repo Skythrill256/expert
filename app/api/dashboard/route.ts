@@ -13,14 +13,22 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Sync user with database
-    await getOrCreateUser(userId);
+    // Sync user with database (with error handling)
+    const user = await getOrCreateUser(userId);
+    
+    // Use the database user's ID, fallback to Clerk ID if sync failed
+    const actualUserId = user ? user.id : userId;
+    
+    if (!user) {
+      // If user sync fails, still continue with userId from Clerk
+      console.warn('User sync failed, continuing with Clerk userId');
+    }
 
     // Get all reports for calculating stats
     const allReports = await db
       .select()
       .from(spermReports)
-      .where(eq(spermReports.userId, userId))
+      .where(eq(spermReports.userId, actualUserId))
       .orderBy(desc(spermReports.reportDate));
 
     // Calculate stats
@@ -35,6 +43,65 @@ export async function GET(request: NextRequest) {
       ? Math.floor(
           (new Date().getTime() - new Date(allReports[allReports.length - 1].reportDate).getTime()) /
             (1000 * 60 * 60 * 24)
+        )
+      : 0;
+
+    // Calculate best and worst scores
+    const bestScore = totalReports > 0
+      ? Math.max(...allReports.map(r => r.adjustedScore || 0))
+      : 0;
+    const worstScore = totalReports > 0
+      ? Math.min(...allReports.map(r => r.adjustedScore || 0))
+      : 0;
+
+    // Calculate improvement rate (percentage change from first to latest)
+    const improvementRate = totalReports >= 2 && allReports[allReports.length - 1]?.adjustedScore
+      ? Math.round(
+          ((currentScore - (allReports[allReports.length - 1].adjustedScore || 0)) / 
+          (allReports[allReports.length - 1].adjustedScore || 1)) * 100
+        )
+      : 0;
+
+    // Calculate lifestyle consistency (percentage of days with logs)
+    const lifestyleLogsData = await db
+      .select()
+      .from(lifestyleLogs)
+      .where(eq(lifestyleLogs.userId, actualUserId))
+      .orderBy(desc(lifestyleLogs.logDate));
+
+    const lifestyleConsistency = daysTracked > 0
+      ? Math.min(100, Math.round((lifestyleLogsData.length / daysTracked) * 100))
+      : 0;
+
+    // Calculate current health streak (consecutive days with lifestyle logs)
+    let healthStreak = 0;
+    if (lifestyleLogsData.length > 0) {
+      const sortedLogs = [...lifestyleLogsData].sort((a, b) => 
+        new Date(b.logDate).getTime() - new Date(a.logDate).getTime()
+      );
+      
+      let currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      
+      for (const log of sortedLogs) {
+        const logDate = new Date(log.logDate);
+        logDate.setHours(0, 0, 0, 0);
+        
+        const diffDays = Math.floor((currentDate.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === healthStreak) {
+          healthStreak++;
+        } else if (diffDays > healthStreak) {
+          break;
+        }
+      }
+    }
+
+    // Calculate average lifestyle points
+    const avgLifestylePoints = lifestyleLogsData.length > 0
+      ? Math.round(
+          lifestyleLogsData.reduce((sum, log) => sum + (log.dailyPoints || 0), 0) / 
+          lifestyleLogsData.length
         )
       : 0;
 
@@ -53,13 +120,6 @@ export async function GET(request: NextRequest) {
         change: Number(change.toFixed(1)),
       };
     });
-
-    // Get lifestyle logs for trend data
-    const lifestyleLogsData = await db
-      .select()
-      .from(lifestyleLogs)
-      .where(eq(lifestyleLogs.userId, userId))
-      .orderBy(desc(lifestyleLogs.logDate));
 
     // Create a map of lifestyle logs by date
     const lifestyleMap = new Map(
@@ -93,7 +153,7 @@ export async function GET(request: NextRequest) {
     const activeRecommendations = await db
       .select()
       .from(recommendations)
-      .where(eq(recommendations.userId, userId))
+      .where(eq(recommendations.userId, actualUserId))
       .orderBy(desc(recommendations.createdAt))
       .limit(3);
 
@@ -104,13 +164,23 @@ export async function GET(request: NextRequest) {
       priority: rec.priority,
     }));
 
+    const statsResponse = {
+      currentScore,
+      averageScore,
+      totalReports,
+      daysTracked,
+      bestScore,
+      worstScore,
+      improvementRate,
+      lifestyleConsistency,
+      healthStreak,
+      avgLifestylePoints,
+    };
+
+    console.log('Dashboard stats:', statsResponse);
+
     return NextResponse.json({
-      stats: {
-        currentScore,
-        averageScore,
-        totalReports,
-        daysTracked,
-      },
+      stats: statsResponse,
       trendData,
       recentReports,
       recommendations: recommendationsPreview,

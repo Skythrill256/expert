@@ -10,12 +10,10 @@ const isPublicRoute = createRouteMatcher([
 // Define protected routes
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
-  '/lifestyle(.*)',
   '/recommendations(.*)',
   '/settings(.*)',
   '/upload(.*)',
   '/api/dashboard(.*)',
-  '/api/lifestyle(.*)',
   '/api/recommendations(.*)',
   '/api/reports(.*)',
   '/api/user(.*)',

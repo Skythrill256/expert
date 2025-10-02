@@ -142,37 +142,37 @@ export default function SettingsPage() {
       
       <PageLayout>
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold mb-2">Settings</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8 animate-fade-in">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Settings</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Manage your account and preferences
           </p>
         </div>
 
         <div className="max-w-4xl">
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="glass mb-6">
-              <TabsTrigger value="profile" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Profile
+            <TabsList className="glass mb-4 sm:mb-6 w-full sm:w-auto overflow-x-auto flex-nowrap">
+              <TabsTrigger value="profile" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
+                <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Profile</span>
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-2">
-                <Bell className="w-4 h-4" />
-                Notifications
+              <TabsTrigger value="notifications" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
+                <Bell className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Notifications</span>
               </TabsTrigger>
-              <TabsTrigger value="privacy" className="flex items-center gap-2">
-                <Lock className="w-4 h-4" />
-                Privacy
+              <TabsTrigger value="privacy" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
+                <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Privacy</span>
               </TabsTrigger>
-              <TabsTrigger value="appearance" className="flex items-center gap-2">
-                <Palette className="w-4 h-4" />
-                Appearance
+              <TabsTrigger value="appearance" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
+                <Palette className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Appearance</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Profile Tab - Clerk UserProfile */}
             <TabsContent value="profile">
-              <div className="glass-card rounded-2xl p-6 animate-fade-in">
+              <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-fade-in">
                 <UserProfile 
                   appearance={{
                     baseTheme: systemTheme === "dark" ? dark : undefined,

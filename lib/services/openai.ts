@@ -227,15 +227,40 @@ export function calculateBaseScore(biomarkers: BiomarkerData): number {
   return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
 }
 
+// Simple lifestyle data from MCQs
+export type SimpleLifestyleData = {
+  healthyEating?: boolean;
+  noSmoking?: boolean;
+  noAlcohol?: boolean;
+  exercise?: boolean;
+  goodSleep?: boolean;
+  looseUnderwear?: boolean;
+};
+
 // Generate personalized recommendations
 export async function generateRecommendations(
   biomarkers: BiomarkerData,
   baseScore: number,
-  lifestyle?: LifestyleAnalysis
+  lifestyle?: LifestyleAnalysis | SimpleLifestyleData | null
 ): Promise<RecommendationData> {
-  const lifestyleInfo = lifestyle 
-    ? `\n\nLifestyle factors:\n- Diet: ${lifestyle.dietQuality}\n- Sleep: ${lifestyle.sleepHours} hours/night\n- Exercise: ${lifestyle.exerciseFrequency}\n- Smoking: ${lifestyle.smoking ? "Yes" : "No"}\n- Alcohol: ${lifestyle.alcoholConsumption}\n- Stress: ${lifestyle.stressLevel}`
-    : "";
+  let lifestyleInfo = "";
+  
+  // Handle different lifestyle data formats
+  if (lifestyle) {
+    if ('healthyEating' in lifestyle) {
+      // Simple MCQ format
+      lifestyleInfo = `\n\nCurrent lifestyle habits:
+- Healthy eating: ${lifestyle.healthyEating ? "Yes" : "No"}
+- Smoking: ${lifestyle.noSmoking ? "No" : "Yes"}
+- Alcohol consumption: ${lifestyle.noAlcohol ? "No" : "Yes"}
+- Regular exercise: ${lifestyle.exercise ? "Yes" : "No"}
+- Good sleep (7+ hours): ${lifestyle.goodSleep ? "Yes" : "No"}
+- Loose underwear: ${lifestyle.looseUnderwear ? "Yes" : "No"}`;
+    } else if ('dietQuality' in lifestyle) {
+      // Detailed lifestyle analysis format
+      lifestyleInfo = `\n\nLifestyle factors:\n- Diet: ${lifestyle.dietQuality}\n- Sleep: ${lifestyle.sleepHours} hours/night\n- Exercise: ${lifestyle.exerciseFrequency}\n- Smoking: ${lifestyle.smoking ? "Yes" : "No"}\n- Alcohol: ${lifestyle.alcoholConsumption}\n- Stress: ${lifestyle.stressLevel}`;
+    }
+  }
 
   const completion = await openai.chat.completions.parse({
     model: "gpt-4o",

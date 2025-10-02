@@ -5,6 +5,7 @@ import { extractBiomarkersFromPDF, calculateBaseScore, generateRecommendations }
 import { auth } from "@clerk/nextjs/server";
 import { getOrCreateUser } from "@/lib/auth";
 import { eq, desc } from "drizzle-orm";
+import { sendNewReportNotification, sendNewRecommendationsNotification } from "@/lib/email/notifications";
 
 // Upload new report
 export async function POST(request: NextRequest) {
@@ -16,14 +17,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await getOrCreateUser(userId);
+    // Ensure user exists in database
+    const dbUser = await getOrCreateUser(userId);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to sync user" }, { status: 500 });
+    }
+
+    // Use the database user's ID (in case it's different from Clerk ID)
+    const actualUserId = dbUser.id;
 
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const reportDate = formData.get("reportDate") as string;
+    const lifestyleDataStr = formData.get("lifestyleData") as string;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    // Parse lifestyle data if provided
+    let lifestyleData = null;
+    if (lifestyleDataStr) {
+      try {
+        lifestyleData = JSON.parse(lifestyleDataStr);
+      } catch (e) {
+        console.error("Failed to parse lifestyle data:", e);
+      }
     }
 
     // Convert file to base64 for OpenAI Vision API
@@ -50,10 +69,13 @@ export async function POST(request: NextRequest) {
     // Calculate base score
     const baseScore = calculateBaseScore(biomarkers);
 
-    // Get user's lifestyle data to calculate adjusted score
-    // For now, we'll use base score as adjusted score
-    // Later this can be enhanced with lifestyle data
-    const adjustedScore = baseScore;
+    // Calculate lifestyle score adjustment if lifestyle data provided
+    let adjustedScore = baseScore;
+    if (lifestyleData) {
+      // Simple lifestyle adjustment: each positive answer adds points
+      const lifestyleBonus = Object.values(lifestyleData).filter((v) => v === true).length * 2;
+      adjustedScore = Math.min(100, baseScore + lifestyleBonus);
+    }
 
     // Create report in database
     const reportId = crypto.randomUUID();
@@ -61,7 +83,7 @@ export async function POST(request: NextRequest) {
 
     await db.insert(spermReports).values({
       id: reportId,
-      userId: userId,
+      userId: actualUserId,
       reportDate: reportDate || now,
       concentration: biomarkers.concentration,
       motility: biomarkers.motility,
@@ -77,14 +99,14 @@ export async function POST(request: NextRequest) {
       updatedAt: now,
     });
 
-    // Generate AI recommendations
-    const recommendationsData = await generateRecommendations(biomarkers, baseScore);
+    // Generate AI recommendations (pass lifestyle data if available)
+    const recommendationsData = await generateRecommendations(biomarkers, baseScore, lifestyleData);
 
     // Save recommendations to database
     const recommendationPromises = recommendationsData.recommendations.map((rec) => {
       return db.insert(recommendationsTable).values({
         id: crypto.randomUUID(),
-        userId: userId,
+        userId: actualUserId,
         recommendationType: rec.type,
         title: rec.title,
         description: `${rec.description}\n\nReasoning: ${rec.reasoning}`,
@@ -96,6 +118,34 @@ export async function POST(request: NextRequest) {
     });
 
     await Promise.all(recommendationPromises);
+
+    // Get previous report score for comparison
+    const previousReports = await db
+      .select()
+      .from(spermReports)
+      .where(eq(spermReports.userId, actualUserId))
+      .orderBy(desc(spermReports.reportDate))
+      .limit(2);
+    
+    const previousScore = previousReports.length > 1 ? previousReports[1].adjustedScore : undefined;
+
+    // Send email notifications asynchronously (don't block response)
+    Promise.all([
+      sendNewReportNotification({
+        userId: actualUserId,
+        reportDate: reportDate || now,
+        currentScore: adjustedScore || 0,
+        previousScore: previousScore || undefined,
+      }),
+      sendNewRecommendationsNotification({
+        userId: actualUserId,
+        recommendations: recommendationsData.recommendations.map(rec => ({
+          title: rec.title,
+          description: rec.description,
+          priority: rec.priority,
+        })),
+      }),
+    ]).catch(err => console.error('Error sending notification emails:', err));
 
     return NextResponse.json({
       success: true,

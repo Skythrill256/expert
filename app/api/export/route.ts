@@ -14,7 +14,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await getOrCreateUser(userId);
+    const user = await getOrCreateUser(userId);
+    const actualUserId = user ? user.id : userId;
 
     // Get last 30 days of data
     const thirtyDaysAgo = new Date();
@@ -25,14 +26,14 @@ export async function GET(request: NextRequest) {
     const reports = await db
       .select()
       .from(spermReports)
-      .where(eq(spermReports.userId, userId))
+      .where(eq(spermReports.userId, actualUserId))
       .orderBy(desc(spermReports.reportDate));
 
     // Fetch lifestyle logs
     const logs = await db
       .select()
       .from(lifestyleLogs)
-      .where(eq(lifestyleLogs.userId, userId))
+      .where(eq(lifestyleLogs.userId, actualUserId))
       .orderBy(desc(lifestyleLogs.logDate));
 
     // Calculate stats

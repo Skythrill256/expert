@@ -3,13 +3,72 @@
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import PageLayout from "@/components/PageLayout";
-import { Upload, FileText, Plus, X, CheckCircle, AlertCircle } from "lucide-react";
+import { Upload, FileText, Plus, X, CheckCircle, AlertCircle, Salad, CigaretteOff, WineOff, Dumbbell, BedDouble, Shirt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+
+// Lifestyle questions as MCQs
+const lifestyleQuestions = [
+  { 
+    key: 'healthyEating', 
+    question: 'Did you eat healthy today?', 
+    icon: <Salad className="w-5 h-5" />,
+    options: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false }
+    ]
+  },
+  { 
+    key: 'noSmoking', 
+    question: 'Did you smoke today?', 
+    icon: <CigaretteOff className="w-5 h-5" />,
+    options: [
+      { label: 'No', value: true },
+      { label: 'Yes', value: false }
+    ]
+  },
+  { 
+    key: 'noAlcohol', 
+    question: 'Did you consume alcohol today?', 
+    icon: <WineOff className="w-5 h-5" />,
+    options: [
+      { label: 'No', value: true },
+      { label: 'Yes', value: false }
+    ]
+  },
+  { 
+    key: 'exercise', 
+    question: 'Did you exercise today?', 
+    icon: <Dumbbell className="w-5 h-5" />,
+    options: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false }
+    ]
+  },
+  { 
+    key: 'goodSleep', 
+    question: 'Did you sleep 7+ hours last night?', 
+    icon: <BedDouble className="w-5 h-5" />,
+    options: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false }
+    ]
+  },
+  { 
+    key: 'looseUnderwear', 
+    question: 'Are you wearing loose underwear?', 
+    icon: <Shirt className="w-5 h-5" />,
+    options: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false }
+    ]
+  },
+];
 
 export default function UploadPage() {
   const [mounted, setMounted] = useState(false);
@@ -26,6 +85,16 @@ export default function UploadPage() {
     volume: "",
     ph: "",
     dfi: "",
+  });
+
+  // Lifestyle data state
+  const [lifestyleData, setLifestyleData] = useState<Record<string, boolean | null>>({
+    healthyEating: null,
+    noSmoking: null,
+    noAlcohol: null,
+    exercise: null,
+    goodSleep: null,
+    looseUnderwear: null,
   });
 
   useEffect(() => {
@@ -51,12 +120,20 @@ export default function UploadPage() {
   const handleFileUpload = async () => {
     if (!selectedFile) return;
 
+    // Validate lifestyle questions are answered
+    const unansweredQuestions = Object.entries(lifestyleData).filter(([_, value]) => value === null);
+    if (unansweredQuestions.length > 0) {
+      toast.error("Please answer all lifestyle questions before uploading");
+      return;
+    }
+
     setUploading(true);
     const loadingToast = toast.loading("Analyzing report with AI...");
     
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("reportDate", manualData.reportDate);
+    formData.append("lifestyleData", JSON.stringify(lifestyleData));
 
     try {
       const response = await fetch("/api/reports", {
@@ -85,6 +162,14 @@ export default function UploadPage() {
 
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate lifestyle questions are answered
+    const unansweredQuestions = Object.entries(lifestyleData).filter(([_, value]) => value === null);
+    if (unansweredQuestions.length > 0) {
+      toast.error("Please answer all lifestyle questions before submitting");
+      return;
+    }
+
     setUploading(true);
 
     // Create synthetic PDF text for manual entry
@@ -108,6 +193,7 @@ DFI: ${manualData.dfi}%
     const formData = new FormData();
     formData.append("file", file);
     formData.append("reportDate", manualData.reportDate);
+    formData.append("lifestyleData", JSON.stringify(lifestyleData));
 
     try {
       const response = await fetch("/api/reports", {
@@ -141,11 +227,64 @@ DFI: ${manualData.dfi}%
         <div className="mb-8 animate-fade-in">
           <h1 className="text-4xl font-bold mb-2">Upload Lab Report</h1>
           <p className="text-muted-foreground">
-            Add your latest sperm analysis results
+            Add your latest sperm analysis results and answer lifestyle questions
           </p>
         </div>
 
         <div className="max-w-5xl mx-auto">
+          {/* Lifestyle Questions Section */}
+          <div className="glass-card rounded-2xl p-8 border border-border/50 mb-8 animate-fade-in">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold mb-2">Lifestyle Questions</h2>
+              <p className="text-muted-foreground text-sm">
+                Answer these quick questions to help our AI provide personalized recommendations
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {lifestyleQuestions.map((question) => {
+                const selectedValue = lifestyleData[question.key as keyof typeof lifestyleData];
+                return (
+                  <div key={question.key} className="space-y-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="text-primary">{question.icon}</div>
+                      <Label className="font-semibold text-sm">{question.question}</Label>
+                    </div>
+                    <div className="flex gap-2">
+                      {question.options.map((option, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setLifestyleData({ 
+                            ...lifestyleData, 
+                            [question.key]: option.value 
+                          })}
+                          className={cn(
+                            "flex-1 py-3 px-4 rounded-lg border-2 transition-all font-medium text-sm",
+                            selectedValue === option.value
+                              ? "border-primary bg-primary/10 text-primary"
+                              : "border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                          )}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Progress indicator */}
+            <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Questions answered:</span>
+                <span className="font-bold text-primary">
+                  {Object.values(lifestyleData).filter(v => v !== null).length} / {lifestyleQuestions.length}
+                </span>
+              </div>
+            </div>
+          </div>
           <Tabs defaultValue="upload" className="w-full">
             <TabsList className="grid w-full grid-cols-2 glass-card mb-8 p-1">
               <TabsTrigger value="upload" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
