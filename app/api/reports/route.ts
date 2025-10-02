@@ -72,8 +72,35 @@ export async function POST(request: NextRequest) {
     // Calculate lifestyle score adjustment if lifestyle data provided
     let adjustedScore = baseScore;
     if (lifestyleData) {
-      // Simple lifestyle adjustment: each positive answer adds points
-      const lifestyleBonus = Object.values(lifestyleData).filter((v) => v === true).length * 2;
+      let lifestyleBonus = 0;
+      
+      // Diet quality (0-3 points)
+      if (lifestyleData.healthyEating === 'excellent') lifestyleBonus += 3;
+      else if (lifestyleData.healthyEating === 'good') lifestyleBonus += 2;
+      else if (lifestyleData.healthyEating === 'fair') lifestyleBonus += 1;
+      
+      // Smoking status (0-3 points)
+      if (lifestyleData.smoking === 'never') lifestyleBonus += 3;
+      else if (lifestyleData.smoking === 'skipped') lifestyleBonus += 2;
+      else if (lifestyleData.smoking === 'reduced') lifestyleBonus += 1;
+      
+      // Alcohol (0-2 points)
+      if (lifestyleData.alcohol === 'none') lifestyleBonus += 2;
+      else if (lifestyleData.alcohol === 'light') lifestyleBonus += 1;
+      
+      // Exercise (0-3 points)
+      if (lifestyleData.exercise === 'intense') lifestyleBonus += 3;
+      else if (lifestyleData.exercise === 'moderate') lifestyleBonus += 2;
+      else if (lifestyleData.exercise === 'light') lifestyleBonus += 1;
+      
+      // Sleep quality (0-2 points)
+      if (lifestyleData.sleep === 'optimal') lifestyleBonus += 2;
+      else if (lifestyleData.sleep === 'good') lifestyleBonus += 1;
+      
+      // Underwear (0-2 points)
+      if (lifestyleData.underwear === 'loose') lifestyleBonus += 2;
+      else if (lifestyleData.underwear === 'moderate') lifestyleBonus += 1;
+      
       adjustedScore = Math.min(100, baseScore + lifestyleBonus);
     }
 

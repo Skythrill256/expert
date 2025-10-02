@@ -149,198 +149,261 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        <div className="max-w-4xl">
+        <div className="max-w-5xl mx-auto">
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="glass mb-4 sm:mb-6 w-full sm:w-auto overflow-x-auto flex-nowrap">
-              <TabsTrigger value="profile" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-                <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Profile</span>
+            <TabsList className="glass-card mb-6 sm:mb-8 w-full justify-start overflow-x-auto p-1.5 rounded-2xl">
+              <TabsTrigger value="profile" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <User className="w-4 h-4" />
+                <span>Profile</span>
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-                <Bell className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Notifications</span>
+              <TabsTrigger value="notifications" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Bell className="w-4 h-4" />
+                <span>Notifications</span>
               </TabsTrigger>
-              <TabsTrigger value="privacy" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-                <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Privacy</span>
+              <TabsTrigger value="privacy" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Lock className="w-4 h-4" />
+                <span>Privacy</span>
               </TabsTrigger>
-              <TabsTrigger value="appearance" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3">
-                <Palette className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Appearance</span>
+              <TabsTrigger value="appearance" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Palette className="w-4 h-4" />
+                <span>Appearance</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Profile Tab - Clerk UserProfile */}
-            <TabsContent value="profile">
-              <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6 animate-fade-in">
-                <UserProfile 
-                  appearance={{
-                    baseTheme: systemTheme === "dark" ? dark : undefined,
-                    elements: {
-                      rootBox: "w-full",
-                      card: "shadow-none bg-transparent border-0",
-                      navbar: "hidden",
-                      navbarMobileMenuButton: "hidden",
-                      headerTitle: "text-foreground",
-                      headerSubtitle: "text-muted-foreground",
-                      profileSection: "bg-transparent",
-                      profileSectionPrimaryButton: "bg-primary text-primary-foreground hover:bg-primary/90",
-                      formButtonPrimary: "bg-primary text-primary-foreground hover:bg-primary/90",
-                      formFieldInput: "bg-background border-border text-foreground",
-                      formFieldLabel: "text-foreground",
-                      badge: "bg-primary/10 text-primary",
-                      avatarBox: "border-border",
-                      userButtonPopoverCard: "bg-card border-border",
-                      userButtonPopoverActionButton: "text-foreground hover:bg-accent",
-                      userButtonPopoverActionButtonText: "text-foreground",
-                      userButtonPopoverFooter: "hidden",
-                    },
-                  }}
-                />
+            <TabsContent value="profile" className="animate-fade-in">
+              <div className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <UserProfile 
+                    appearance={{
+                      baseTheme: systemTheme === "dark" ? dark : undefined,
+                      elements: {
+                        rootBox: "w-full",
+                        card: "shadow-none bg-transparent border-0",
+                        navbar: "hidden",
+                        navbarMobileMenuButton: "hidden",
+                        headerTitle: "text-foreground font-bold text-xl",
+                        headerSubtitle: "text-muted-foreground",
+                        profileSection: "bg-transparent",
+                        profileSectionPrimaryButton: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl",
+                        formButtonPrimary: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl",
+                        formFieldInput: "bg-background border-border text-foreground rounded-xl",
+                        formFieldLabel: "text-foreground font-medium",
+                        badge: "bg-primary/10 text-primary rounded-full",
+                        avatarBox: "border-border",
+                        userButtonPopoverCard: "bg-card border-border",
+                        userButtonPopoverActionButton: "text-foreground hover:bg-accent",
+                        userButtonPopoverActionButtonText: "text-foreground",
+                        userButtonPopoverFooter: "hidden",
+                      },
+                    }}
+                  />
+                </div>
               </div>
             </TabsContent>
 
             {/* Notifications Tab */}
-            <TabsContent value="notifications">
-              <div className="glass-card rounded-2xl p-6 animate-fade-in">
-                <h2 className="text-2xl font-bold mb-6">Notification Preferences</h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 rounded-xl glass">
-                    <div>
-                      <p className="font-medium">Email Notifications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive updates and insights via email
-                      </p>
+            <TabsContent value="notifications" className="animate-fade-in">
+              <div className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/10 flex items-center justify-center">
+                      <Bell className="w-6 h-6 text-primary" />
                     </div>
-                    <Switch
-                      checked={notifications.emailNotifications}
-                      onCheckedChange={(checked) => 
-                        setNotifications({ ...notifications, emailNotifications: checked })
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 rounded-xl glass">
                     <div>
-                      <p className="font-medium">Push Notifications</p>
-                      <p className="text-sm text-muted-foreground">
-                        Get notified about important updates
-                      </p>
+                      <h2 className="text-2xl font-bold">Notification Preferences</h2>
+                      <p className="text-sm text-muted-foreground">Manage how you receive updates</p>
                     </div>
-                    <Switch
-                      checked={notifications.pushNotifications}
-                      onCheckedChange={(checked) => 
-                        setNotifications({ ...notifications, pushNotifications: checked })
-                      }
-                    />
                   </div>
-
-                  <div className="flex items-center justify-between p-4 rounded-xl glass">
-                    <div>
-                      <p className="font-medium">Weekly Progress Reports</p>
-                      <p className="text-sm text-muted-foreground">
-                        Receive weekly summaries of your health journey
-                      </p>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start justify-between p-5 rounded-2xl glass-card hover-lift smooth-transition border border-border/50">
+                      <div className="flex-1 pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold">Email Notifications</p>
+                          {notifications.emailNotifications && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Active</span>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Receive updates and insights via email
+                        </p>
+                      </div>
+                      <Switch
+                        checked={notifications.emailNotifications}
+                        onCheckedChange={(checked) => 
+                          setNotifications({ ...notifications, emailNotifications: checked })
+                        }
+                      />
                     </div>
-                    <Switch
-                      checked={notifications.weeklyReports}
-                      onCheckedChange={(checked) => 
-                        setNotifications({ ...notifications, weeklyReports: checked })
-                      }
-                    />
-                  </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-xl glass">
-                    <div>
-                      <p className="font-medium">New Recommendations</p>
-                      <p className="text-sm text-muted-foreground">
-                        Get alerted when new recommendations are available
-                      </p>
+                    <div className="flex items-start justify-between p-5 rounded-2xl glass-card hover-lift smooth-transition border border-border/50">
+                      <div className="flex-1 pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold">Push Notifications</p>
+                          {notifications.pushNotifications && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Active</span>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Get notified about important updates
+                        </p>
+                      </div>
+                      <Switch
+                        checked={notifications.pushNotifications}
+                        onCheckedChange={(checked) => 
+                          setNotifications({ ...notifications, pushNotifications: checked })
+                        }
+                      />
                     </div>
-                    <Switch
-                      checked={notifications.recommendationsNotifications}
-                      onCheckedChange={(checked) => 
-                        setNotifications({ ...notifications, recommendationsNotifications: checked })
-                      }
-                    />
-                  </div>
 
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={handleSaveSettings}
-                    disabled={saving}
-                  >
-                    {saving ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Preferences
-                      </>
-                    )}
-                  </Button>
+                    <div className="flex items-start justify-between p-5 rounded-2xl glass-card hover-lift smooth-transition border border-border/50">
+                      <div className="flex-1 pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold">Weekly Progress Reports</p>
+                          {notifications.weeklyReports && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Active</span>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Receive weekly summaries of your health journey
+                        </p>
+                      </div>
+                      <Switch
+                        checked={notifications.weeklyReports}
+                        onCheckedChange={(checked) => 
+                          setNotifications({ ...notifications, weeklyReports: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-start justify-between p-5 rounded-2xl glass-card hover-lift smooth-transition border border-border/50">
+                      <div className="flex-1 pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold">New Recommendations</p>
+                          {notifications.recommendationsNotifications && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Active</span>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Get alerted when new recommendations are available
+                        </p>
+                      </div>
+                      <Switch
+                        checked={notifications.recommendationsNotifications}
+                        onCheckedChange={(checked) => 
+                          setNotifications({ ...notifications, recommendationsNotifications: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="pt-4">
+                      <Button 
+                        className="w-full rounded-xl" 
+                        size="lg"
+                        onClick={handleSaveSettings}
+                        disabled={saving}
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Saving Changes...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-5 h-5 mr-2" />
+                            Save Preferences
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </TabsContent>
 
             {/* Privacy Tab */}
-            <TabsContent value="privacy">
-              <div className="glass-card rounded-2xl p-6 animate-fade-in">
-                <h2 className="text-2xl font-bold mb-6">Privacy & Security</h2>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold mb-2">Change Password</h3>
-                    <div className="space-y-4">
-                      <Input
-                        type="password"
-                        placeholder="Current Password"
-                        className="glass"
-                        disabled
-                      />
-                      <Input
-                        type="password"
-                        placeholder="New Password"
-                        className="glass"
-                        disabled
-                      />
-                      <Input
-                        type="password"
-                        placeholder="Confirm New Password"
-                        className="glass"
-                        disabled
-                      />
-                      <Button variant="outline" disabled>Update Password</Button>
-                      <p className="text-xs text-muted-foreground">Password change functionality coming soon</p>
+            <TabsContent value="privacy" className="animate-fade-in">
+              <div className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/10 flex items-center justify-center">
+                      <Lock className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Privacy & Security</h2>
+                      <p className="text-sm text-muted-foreground">Manage your account security</p>
                     </div>
                   </div>
+                  
+                  <div className="space-y-6">
+                    <div className="glass-card rounded-2xl p-6 border border-border/50">
+                      <h3 className="font-semibold mb-4 flex items-center gap-2">
+                        <Lock className="w-5 h-5 text-primary" />
+                        Change Password
+                      </h3>
+                      <div className="space-y-4">
+                        <Input
+                          type="password"
+                          placeholder="Current Password"
+                          className="rounded-xl"
+                          disabled
+                        />
+                        <Input
+                          type="password"
+                          placeholder="New Password"
+                          className="rounded-xl"
+                          disabled
+                        />
+                        <Input
+                          type="password"
+                          placeholder="Confirm New Password"
+                          className="rounded-xl"
+                          disabled
+                        />
+                        <Button variant="outline" className="rounded-xl" disabled>Update Password</Button>
+                        <div className="bg-primary/5 border border-primary/20 rounded-xl p-3">
+                          <p className="text-xs text-muted-foreground">
+                            🔒 Password change functionality coming soon
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="pt-6 border-t border-border/50">
-                    <h3 className="font-semibold mb-2 text-red-500">Danger Zone</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Permanent actions that cannot be undone
-                    </p>
-                    <div className="space-y-3">
-                      <Button 
-                        variant="outline" 
-                        className="w-full text-red-500 border-red-500/50 hover:bg-red-500/10"
-                        disabled
-                      >
-                        Delete All Data
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full text-red-500 border-red-500/50 hover:bg-red-500/10"
-                        disabled
-                      >
-                        Delete Account
-                      </Button>
-                      <p className="text-xs text-muted-foreground">Account deletion functionality coming soon</p>
+                    <div className="glass-card rounded-2xl p-6 border border-destructive/30">
+                      <h3 className="font-semibold mb-2 text-destructive flex items-center gap-2">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Danger Zone
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Permanent actions that cannot be undone
+                      </p>
+                      <div className="space-y-3">
+                        <Button 
+                          variant="outline" 
+                          className="w-full text-destructive border-destructive/50 hover:bg-destructive/10 rounded-xl"
+                          disabled
+                        >
+                          Delete All Data
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="w-full text-destructive border-destructive/50 hover:bg-destructive/10 rounded-xl"
+                          disabled
+                        >
+                          Delete Account
+                        </Button>
+                        <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-3">
+                          <p className="text-xs text-muted-foreground">
+                            ⚠️ Account deletion functionality coming soon
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -348,105 +411,129 @@ export default function SettingsPage() {
             </TabsContent>
 
             {/* Appearance Tab */}
-            <TabsContent value="appearance">
-              <div className="glass-card rounded-2xl p-6 animate-fade-in">
-                <h2 className="text-2xl font-bold mb-6">Appearance</h2>
-                
-                <div className="space-y-6">
-                  <div>
-                    <Label className="mb-3 block">Theme</Label>
-                    <div className="grid grid-cols-3 gap-4">
-                      <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'light' ? 'ring-2' : ''}`}
-                        onClick={() => {
-                          setTheme('light');
-                          setSettingsData({ ...settingsData, theme: 'light' });
-                        }}
-                      >
-                        <div className="w-full h-20 rounded-lg bg-gradient-to-br from-white to-gray-100 mb-2"></div>
-                        <p className="text-sm font-medium">Light</p>
-                      </button>
-                      <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'dark' ? 'ring-2' : ''}`}
-                        onClick={() => {
-                          setTheme('dark');
-                          setSettingsData({ ...settingsData, theme: 'dark' });
-                        }}
-                      >
-                        <div className="w-full h-20 rounded-lg bg-gradient-to-br from-gray-900 to-black mb-2"></div>
-                        <p className="text-sm font-medium">Dark</p>
-                      </button>
-                      <button 
-                        className={`p-4 rounded-xl glass hover:ring-2 ring-primary smooth-transition ${systemTheme === 'system' ? 'ring-2' : ''}`}
-                        onClick={() => {
-                          setTheme('system');
-                          setSettingsData({ ...settingsData, theme: 'system' });
-                        }}
-                      >
-                        <div className="w-full h-20 rounded-lg bg-gradient-to-br from-white via-gray-400 to-black mb-2"></div>
-                        <p className="text-sm font-medium">System</p>
-                      </button>
+            <TabsContent value="appearance" className="animate-fade-in">
+              <div className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/10 flex items-center justify-center">
+                      <Palette className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Appearance</h2>
+                      <p className="text-sm text-muted-foreground">Customize your experience</p>
                     </div>
                   </div>
+                  
+                  <div className="space-y-8">
+                    <div>
+                      <Label className="mb-4 block text-base font-semibold">Theme</Label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button 
+                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                            systemTheme === 'light' ? 'border-primary' : 'border-transparent'
+                          }`}
+                          onClick={() => {
+                            setTheme('light');
+                            setSettingsData({ ...settingsData, theme: 'light' });
+                          }}
+                        >
+                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-white to-gray-100 mb-3 border border-border shadow-inner"></div>
+                          <p className="text-sm font-semibold mb-1">Light</p>
+                          <p className="text-xs text-muted-foreground">Bright and clear</p>
+                        </button>
+                        <button 
+                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                            systemTheme === 'dark' ? 'border-primary' : 'border-transparent'
+                          }`}
+                          onClick={() => {
+                            setTheme('dark');
+                            setSettingsData({ ...settingsData, theme: 'dark' });
+                          }}
+                        >
+                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-gray-900 to-black mb-3 border border-border shadow-inner"></div>
+                          <p className="text-sm font-semibold mb-1">Dark</p>
+                          <p className="text-xs text-muted-foreground">Easy on the eyes</p>
+                        </button>
+                        <button 
+                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                            systemTheme === 'system' ? 'border-primary' : 'border-transparent'
+                          }`}
+                          onClick={() => {
+                            setTheme('system');
+                            setSettingsData({ ...settingsData, theme: 'system' });
+                          }}
+                        >
+                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-white via-gray-400 to-black mb-3 border border-border shadow-inner"></div>
+                          <p className="text-sm font-semibold mb-1">System</p>
+                          <p className="text-xs text-muted-foreground">Matches device</p>
+                        </button>
+                      </div>
+                    </div>
 
-                  <div>
-                    <Label className="mb-3 block">Timezone</Label>
-                    <Select
-                      value={settingsData.timezone}
-                      onValueChange={(value) => setSettingsData({ ...settingsData, timezone: value })}
-                    >
-                      <SelectTrigger className="glass">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="America/Los_Angeles">Pacific Time (PT)</SelectItem>
-                        <SelectItem value="America/Denver">Mountain Time (MT)</SelectItem>
-                        <SelectItem value="America/Chicago">Central Time (CT)</SelectItem>
-                        <SelectItem value="America/New_York">Eastern Time (ET)</SelectItem>
-                        <SelectItem value="Europe/London">London (GMT)</SelectItem>
-                        <SelectItem value="Europe/Paris">Paris (CET)</SelectItem>
-                        <SelectItem value="Asia/Tokyo">Tokyo (JST)</SelectItem>
-                        <SelectItem value="UTC">UTC</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <Label className="mb-3 block text-base font-semibold">Timezone</Label>
+                        <Select
+                          value={settingsData.timezone}
+                          onValueChange={(value) => setSettingsData({ ...settingsData, timezone: value })}
+                        >
+                          <SelectTrigger className="rounded-xl h-12">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="America/Los_Angeles">Pacific Time (PT)</SelectItem>
+                            <SelectItem value="America/Denver">Mountain Time (MT)</SelectItem>
+                            <SelectItem value="America/Chicago">Central Time (CT)</SelectItem>
+                            <SelectItem value="America/New_York">Eastern Time (ET)</SelectItem>
+                            <SelectItem value="Europe/London">London (GMT)</SelectItem>
+                            <SelectItem value="Europe/Paris">Paris (CET)</SelectItem>
+                            <SelectItem value="Asia/Tokyo">Tokyo (JST)</SelectItem>
+                            <SelectItem value="UTC">UTC</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label className="mb-3 block text-base font-semibold">Language</Label>
+                        <Select 
+                          value={settingsData.language}
+                          onValueChange={(value) => setSettingsData({ ...settingsData, language: value })}
+                        >
+                          <SelectTrigger className="rounded-xl h-12">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="en">🇺🇸 English</SelectItem>
+                            <SelectItem value="es">🇪🇸 Español</SelectItem>
+                            <SelectItem value="fr">🇫🇷 Français</SelectItem>
+                            <SelectItem value="de">🇩🇪 Deutsch</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="pt-4">
+                      <Button 
+                        className="w-full rounded-xl" 
+                        size="lg"
+                        onClick={handleSaveSettings}
+                        disabled={saving}
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Saving Changes...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-5 h-5 mr-2" />
+                            Save Preferences
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
-
-                  <div>
-                    <Label className="mb-3 block">Language</Label>
-                    <Select 
-                      value={settingsData.language}
-                      onValueChange={(value) => setSettingsData({ ...settingsData, language: value })}
-                    >
-                      <SelectTrigger className="glass">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="es">Español</SelectItem>
-                        <SelectItem value="fr">Français</SelectItem>
-                        <SelectItem value="de">Deutsch</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={handleSaveSettings}
-                    disabled={saving}
-                  >
-                    {saving ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Preferences
-                      </>
-                    )}
-                  </Button>
                 </div>
               </div>
             </TabsContent>

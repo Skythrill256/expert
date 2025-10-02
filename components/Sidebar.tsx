@@ -2,6 +2,7 @@
 
 import { Home, Upload, TrendingUp, Settings, Menu, X, LogOut, Share2, Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -58,9 +59,11 @@ export default function Sidebar() {
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 glass-card rounded-xl shadow-lg"
-        aria-label="Toggle menu"
+        aria-expanded={isOpen}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 glass-card border rounded-full shadow-lg flex items-center justify-center"
       >
+        <span className="sr-only">{isOpen ? 'Close menu' : 'Open menu'}</span>
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
@@ -89,15 +92,28 @@ export default function Sidebar() {
         aria-label="Primary"
       >
         <div className="flex flex-col h-full">
-          {/* Header - Always collapsed on desktop */}
+          {/* Header with Logo */}
           <div className="mb-8 flex items-center justify-center transition-all duration-300">
-            {/* No header content in collapsed state */}
+            <Link href="/dashboard" className="flex items-center group">
+              <div className={cn(
+                "relative transition-all duration-300 hover:scale-110",
+                isCollapsed ? "w-10 h-10" : "w-12 h-12"
+              )}>
+                <Image 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </Link>
           </div>
 
           {/* Navigation */}
           <nav className={cn(
             "flex-1 flex flex-col",
-            isCollapsed ? "space-y-3" : "space-y-2"
+            isCollapsed ? "lg:space-y-3" : "space-y-2"
           )}>
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -113,24 +129,26 @@ export default function Sidebar() {
                     isActive
                       ? "bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
                       : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground",
+                    // Mobile: always show text with padding and gap
+                    "px-5 py-3 gap-3",
+                    // Desktop: conditional styling based on collapse state
                     isCollapsed 
-                      ? "justify-center h-11 w-full" 
-                      : "px-5 py-3 gap-3"
+                      ? "lg:justify-center lg:h-11 lg:w-full lg:px-0 lg:gap-0" 
+                      : "lg:px-5 lg:py-3 lg:gap-3"
                   )}
                 >
-                  <Icon className={cn(
-                    "shrink-0",
-                    isCollapsed ? "w-5 h-5" : "w-5 h-5"
-                  )} />
-                  {!isCollapsed && (
-                    <span className="font-medium whitespace-nowrap">
-                      {item.name}
-                    </span>
-                  )}
+                  <Icon className="w-5 h-5 shrink-0" />
+                  {/* Always show text on mobile, conditionally on desktop */}
+                  <span className={cn(
+                    "font-medium whitespace-nowrap",
+                    isCollapsed && "lg:hidden"
+                  )}>
+                    {item.name}
+                  </span>
                   
-                  {/* Tooltip for collapsed state */}
+                  {/* Tooltip for collapsed state on desktop only */}
                   {isCollapsed && (
-                    <span className="absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
+                    <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
                       {item.name}
                       <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
                     </span>
@@ -149,25 +167,34 @@ export default function Sidebar() {
             <div className="relative group">
               <Button
                 variant="outline"
-                size="icon"
                 className={cn(
                   "w-full h-11 hover:bg-accent/60 border-border/50 rounded-full",
-                  !isCollapsed && "aspect-auto"
+                  // Mobile: always show text with proper layout
+                  "flex items-center justify-start px-4 gap-3",
+                  // Desktop: conditional styling based on collapse state
+                  isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                 )}
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {mounted && (
                   theme === "dark" ? (
-                    <Sun className="w-5 h-5" />
+                    <Sun className="w-5 h-5 shrink-0" />
                   ) : (
-                    <Moon className="w-5 h-5" />
+                    <Moon className="w-5 h-5 shrink-0" />
                   )
                 )}
+                {/* Always show text on mobile, conditionally on desktop */}
+                <span className={cn(
+                  "font-medium",
+                  isCollapsed && "lg:hidden"
+                )}>
+                  {mounted && (theme === "dark" ? "Light Mode" : "Dark Mode")}
+                </span>
               </Button>
               
-              {/* Tooltip for collapsed state */}
+              {/* Tooltip for collapsed state on desktop only */}
               {isCollapsed && (
-                <span className="absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
+                <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
                   {mounted && (theme === "dark" ? "Light mode" : "Dark mode")}
                   <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
                 </span>
@@ -191,27 +218,29 @@ export default function Sidebar() {
               <>
                 <div className={cn(
                   "relative group flex items-center rounded-full glass hover:bg-accent/30 smooth-transition cursor-pointer",
-                  isCollapsed ? "justify-center p-2" : "gap-3 p-2.5 pl-2.5 pr-3"
+                  // Mobile: always show with proper spacing
+                  "gap-3 p-2.5 pl-2.5 pr-3",
+                  // Desktop: conditional styling based on collapse state
+                  isCollapsed && "lg:justify-center lg:p-2 lg:gap-0"
                 )}>
-                  <Avatar className={cn(
-                    "shrink-0 ring-2 ring-border/50",
-                    isCollapsed ? "w-10 h-10" : "w-10 h-10"
-                  )}>
+                  <Avatar className="w-10 h-10 shrink-0 ring-2 ring-border/50">
                     <AvatarImage src={session.user.image || undefined} alt={session.user.name || "User"} />
                     <AvatarFallback className="bg-gradient-to-br from-primary to-chart-2 text-white font-semibold text-sm">
                       {getInitials(session.user.name || "User")}
                     </AvatarFallback>
                   </Avatar>
-                  {!isCollapsed && (
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{session.user.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
-                    </div>
-                  )}
+                  {/* Always show on mobile, conditionally on desktop */}
+                  <div className={cn(
+                    "flex-1 min-w-0",
+                    isCollapsed && "lg:hidden"
+                  )}>
+                    <p className="text-sm font-medium truncate">{session.user.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+                  </div>
                   
-                  {/* Tooltip for collapsed state */}
+                  {/* Tooltip for collapsed state on desktop only */}
                   {isCollapsed && (
-                    <span className="absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-xl border border-border pointer-events-none min-w-[200px]">
+                    <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-xl border border-border pointer-events-none min-w-[200px]">
                       <p className="font-medium">{session.user.name}</p>
                       <p className="text-xs text-muted-foreground mt-1">{session.user.email}</p>
                       <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
@@ -222,22 +251,28 @@ export default function Sidebar() {
                 <div className="relative group">
                   <Button
                     variant="outline"
-                    size="icon"
                     className={cn(
                       "w-full h-11 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 border-border/50 smooth-transition rounded-full",
-                      !isCollapsed && "aspect-auto justify-start px-4"
+                      // Mobile: always show text with proper layout
+                      "flex items-center justify-start px-4 gap-3",
+                      // Desktop: conditional styling based on collapse state
+                      isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                     )}
                     onClick={handleSignOut}
                   >
-                    <LogOut className={cn("shrink-0", isCollapsed ? "w-5 h-5" : "w-5 h-5")} />
-                    {!isCollapsed && (
-                      <span className="ml-3 font-medium">Sign Out</span>
-                    )}
+                    <LogOut className="w-5 h-5 shrink-0" />
+                    {/* Always show text on mobile, conditionally on desktop */}
+                    <span className={cn(
+                      "font-medium",
+                      isCollapsed && "lg:hidden"
+                    )}>
+                      Sign Out
+                    </span>
                   </Button>
                   
-                  {/* Tooltip for collapsed state */}
+                  {/* Tooltip for collapsed state on desktop only */}
                   {isCollapsed && (
-                    <span className="absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
+                    <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
                       Sign Out
                       <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
                     </span>
@@ -248,22 +283,28 @@ export default function Sidebar() {
               <div className="relative group">
                 <Button
                   variant="outline"
-                  size="icon"
                   className={cn(
                     "w-full h-11 hover:bg-accent/50 border-border/50 rounded-full",
-                    !isCollapsed && "aspect-auto justify-start px-4"
+                    // Mobile: always show text with proper layout
+                    "flex items-center justify-start px-4 gap-3",
+                    // Desktop: conditional styling based on collapse state
+                    isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                   )}
                   onClick={() => router.push("/login")}
                 >
-                  <LogOut className={cn("shrink-0", isCollapsed ? "w-5 h-5" : "w-5 h-5")} />
-                  {!isCollapsed && (
-                    <span className="ml-3 font-medium">Sign In</span>
-                  )}
+                  <LogOut className="w-5 h-5 shrink-0" />
+                  {/* Always show text on mobile, conditionally on desktop */}
+                  <span className={cn(
+                    "font-medium",
+                    isCollapsed && "lg:hidden"
+                  )}>
+                    Sign In
+                  </span>
                 </Button>
                 
-                {/* Tooltip for collapsed state */}
+                {/* Tooltip for collapsed state on desktop only */}
                 {isCollapsed && (
-                  <span className="absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
+                  <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
                     Sign In
                     <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
                   </span>

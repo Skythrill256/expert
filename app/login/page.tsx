@@ -1,7 +1,7 @@
 "use client";
 
 import { SignIn } from '@clerk/nextjs';
-import { Activity, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import { useTheme } from 'next-themes';
 import { dark } from '@clerk/themes';
 
@@ -14,9 +14,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-chart-2 flex items-center justify-center mx-auto mb-4">
-            <Activity className="w-8 h-8 text-white" />
-          </div>
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-chart-2 mx-auto mb-4" />
           <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
           <p className="text-muted-foreground">Sign in to continue tracking your health</p>
         </div>

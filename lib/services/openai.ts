@@ -229,12 +229,12 @@ export function calculateBaseScore(biomarkers: BiomarkerData): number {
 
 // Simple lifestyle data from MCQs
 export type SimpleLifestyleData = {
-  healthyEating?: boolean;
-  noSmoking?: boolean;
-  noAlcohol?: boolean;
-  exercise?: boolean;
-  goodSleep?: boolean;
-  looseUnderwear?: boolean;
+  healthyEating?: 'excellent' | 'good' | 'fair' | 'poor';
+  smoking?: 'never' | 'skipped' | 'reduced' | 'normal';
+  alcohol?: 'none' | 'light' | 'moderate' | 'heavy';
+  exercise?: 'intense' | 'moderate' | 'light' | 'none';
+  sleep?: 'optimal' | 'good' | 'fair' | 'poor';
+  underwear?: 'loose' | 'moderate' | 'briefs' | 'tight';
 };
 
 // Generate personalized recommendations
@@ -249,13 +249,30 @@ export async function generateRecommendations(
   if (lifestyle) {
     if ('healthyEating' in lifestyle) {
       // Simple MCQ format
-      lifestyleInfo = `\n\nCurrent lifestyle habits:
-- Healthy eating: ${lifestyle.healthyEating ? "Yes" : "No"}
-- Smoking: ${lifestyle.noSmoking ? "No" : "Yes"}
-- Alcohol consumption: ${lifestyle.noAlcohol ? "No" : "Yes"}
-- Regular exercise: ${lifestyle.exercise ? "Yes" : "No"}
-- Good sleep (7+ hours): ${lifestyle.goodSleep ? "Yes" : "No"}
-- Loose underwear: ${lifestyle.looseUnderwear ? "Yes" : "No"}`;
+      const habits: string[] = [];
+      
+      if (lifestyle.healthyEating) {
+        habits.push(`- Diet quality: ${lifestyle.healthyEating}`);
+      }
+      if (lifestyle.smoking) {
+        habits.push(`- Smoking status: ${lifestyle.smoking}`);
+      }
+      if (lifestyle.alcohol) {
+        habits.push(`- Alcohol consumption: ${lifestyle.alcohol}`);
+      }
+      if (lifestyle.exercise) {
+        habits.push(`- Exercise level: ${lifestyle.exercise}`);
+      }
+      if (lifestyle.sleep) {
+        habits.push(`- Sleep quality: ${lifestyle.sleep}`);
+      }
+      if (lifestyle.underwear) {
+        habits.push(`- Underwear type: ${lifestyle.underwear}`);
+      }
+      
+      if (habits.length > 0) {
+        lifestyleInfo = `\n\nCurrent lifestyle habits:\n${habits.join('\n')}`;
+      }
     } else if ('dietQuality' in lifestyle) {
       // Detailed lifestyle analysis format
       lifestyleInfo = `\n\nLifestyle factors:\n- Diet: ${lifestyle.dietQuality}\n- Sleep: ${lifestyle.sleepHours} hours/night\n- Exercise: ${lifestyle.exerciseFrequency}\n- Smoking: ${lifestyle.smoking ? "Yes" : "No"}\n- Alcohol: ${lifestyle.alcoholConsumption}\n- Stress: ${lifestyle.stressLevel}`;

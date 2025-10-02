@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, TrendingUp, Target, Hand, ArrowRight, AlertTriangle, Lightbulb, Award, TrendingDown, Flame, Calendar, Star, BarChart3 } from "lucide-react";
+import { Activity, TrendingUp, Target, ArrowRight, AlertTriangle, Lightbulb, Award, TrendingDown, Flame, Calendar, Star, BarChart3 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import PageLayout from "@/components/PageLayout";
 import TrendChart from "@/components/TrendChart";
@@ -171,7 +171,7 @@ export default function DashboardPage() {
         <Sidebar />
         <PageLayout>
           <div className="mb-8 animate-fade-in">
-            <h1 className="text-4xl font-bold mb-2 flex items-center gap-2">Welcome, {firstName}! <Hand className="w-7 h-7 text-primary" /></h1>
+            <h1 className="text-4xl font-bold mb-2 flex items-center gap-2">Welcome, {firstName}!</h1>
             <p className="text-muted-foreground">
               Let's get started by uploading your first report
             </p>
@@ -214,7 +214,6 @@ export default function DashboardPage() {
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 flex items-center gap-2 flex-wrap">
               <span className="truncate">Welcome back, {firstName}</span>
-              <Hand className="w-6 h-6 sm:w-7 sm:h-7 text-primary shrink-0" />
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground">Here's your health overview for today</p>
           </div>

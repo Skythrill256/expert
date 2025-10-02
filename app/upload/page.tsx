@@ -12,60 +12,72 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-// Lifestyle questions as MCQs
+// Lifestyle questions with multiple choice options
 const lifestyleQuestions = [
   { 
     key: 'healthyEating', 
-    question: 'Did you eat healthy today?', 
+    question: 'How would you describe your diet today?', 
     icon: <Salad className="w-5 h-5" />,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false }
+      { label: 'Excellent - All healthy meals', value: 'excellent', score: 2 },
+      { label: 'Good - Mostly healthy', value: 'good', score: 1.5 },
+      { label: 'Fair - Some healthy choices', value: 'fair', score: 1 },
+      { label: 'Poor - Unhealthy meals', value: 'poor', score: 0 }
     ]
   },
   { 
-    key: 'noSmoking', 
+    key: 'smoking', 
     question: 'Did you smoke today?', 
     icon: <CigaretteOff className="w-5 h-5" />,
     options: [
-      { label: 'No', value: true },
-      { label: 'Yes', value: false }
+      { label: 'No, I don\'t smoke', value: 'never', score: 2 },
+      { label: 'No, but I usually do', value: 'skipped', score: 1.5 },
+      { label: 'Yes, less than usual', value: 'reduced', score: 0.5 },
+      { label: 'Yes, normal amount', value: 'normal', score: 0 }
     ]
   },
   { 
-    key: 'noAlcohol', 
+    key: 'alcohol', 
     question: 'Did you consume alcohol today?', 
     icon: <WineOff className="w-5 h-5" />,
     options: [
-      { label: 'No', value: true },
-      { label: 'Yes', value: false }
+      { label: 'No alcohol', value: 'none', score: 2 },
+      { label: '1 drink', value: 'light', score: 1.5 },
+      { label: '2-3 drinks', value: 'moderate', score: 0.5 },
+      { label: '4+ drinks', value: 'heavy', score: 0 }
     ]
   },
   { 
     key: 'exercise', 
-    question: 'Did you exercise today?', 
+    question: 'How much did you exercise today?', 
     icon: <Dumbbell className="w-5 h-5" />,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false }
+      { label: '60+ minutes', value: 'intense', score: 2 },
+      { label: '30-60 minutes', value: 'moderate', score: 1.5 },
+      { label: '10-30 minutes', value: 'light', score: 1 },
+      { label: 'No exercise', value: 'none', score: 0 }
     ]
   },
   { 
-    key: 'goodSleep', 
-    question: 'Did you sleep 7+ hours last night?', 
+    key: 'sleep', 
+    question: 'How many hours did you sleep last night?', 
     icon: <BedDouble className="w-5 h-5" />,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false }
+      { label: '7-9 hours (Optimal)', value: 'optimal', score: 2 },
+      { label: '6-7 hours (Good)', value: 'good', score: 1.5 },
+      { label: '5-6 hours (Fair)', value: 'fair', score: 0.5 },
+      { label: 'Less than 5 hours', value: 'poor', score: 0 }
     ]
   },
   { 
-    key: 'looseUnderwear', 
-    question: 'Are you wearing loose underwear?', 
+    key: 'underwear', 
+    question: 'What type of underwear are you wearing?', 
     icon: <Shirt className="w-5 h-5" />,
     options: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false }
+      { label: 'Loose boxers', value: 'loose', score: 2 },
+      { label: 'Regular boxers', value: 'moderate', score: 1.5 },
+      { label: 'Briefs', value: 'briefs', score: 0.5 },
+      { label: 'Tight/restrictive', value: 'tight', score: 0 }
     ]
   },
 ];
@@ -87,14 +99,14 @@ export default function UploadPage() {
     dfi: "",
   });
 
-  // Lifestyle data state
-  const [lifestyleData, setLifestyleData] = useState<Record<string, boolean | null>>({
+  // Lifestyle data state - now supports string values for multiple choice
+  const [lifestyleData, setLifestyleData] = useState<Record<string, string | null>>({
     healthyEating: null,
-    noSmoking: null,
-    noAlcohol: null,
+    smoking: null,
+    alcohol: null,
     exercise: null,
-    goodSleep: null,
-    looseUnderwear: null,
+    sleep: null,
+    underwear: null,
   });
 
   useEffect(() => {
@@ -241,16 +253,18 @@ DFI: ${manualData.dfi}%
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-6">
               {lifestyleQuestions.map((question) => {
                 const selectedValue = lifestyleData[question.key as keyof typeof lifestyleData];
                 return (
-                  <div key={question.key} className="space-y-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="text-primary">{question.icon}</div>
-                      <Label className="font-semibold text-sm">{question.question}</Label>
+                  <div key={question.key} className="glass-card rounded-2xl p-5 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                        {question.icon}
+                      </div>
+                      <Label className="font-semibold text-base">{question.question}</Label>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {question.options.map((option, idx) => (
                         <button
                           key={idx}
@@ -260,13 +274,18 @@ DFI: ${manualData.dfi}%
                             [question.key]: option.value 
                           })}
                           className={cn(
-                            "flex-1 py-3 px-4 rounded-lg border-2 transition-all font-medium text-sm",
+                            "relative py-4 px-4 rounded-xl border-2 transition-all font-medium text-sm text-left group hover-lift",
                             selectedValue === option.value
-                              ? "border-primary bg-primary/10 text-primary"
-                              : "border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                              ? "border-primary bg-primary/10 text-primary shadow-lg"
+                              : "border-border/50 hover:border-primary/30 hover:bg-primary/5"
                           )}
                         >
-                          {option.label}
+                          <div className="flex items-center justify-between">
+                            <span>{option.label}</span>
+                            {selectedValue === option.value && (
+                              <CheckCircle className="w-5 h-5 text-primary" />
+                            )}
+                          </div>
                         </button>
                       ))}
                     </div>

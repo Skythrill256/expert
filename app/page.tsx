@@ -13,6 +13,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import AnimatedSection from "@/components/AnimatedSection";
 import PageTransition from "@/components/PageTransition";
@@ -45,9 +46,15 @@ export default function LandingPage() {
         <AnimatedBackground />
       {/* Hero */}
         <header className="container mx-auto px-6 py-6 md:py-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="size-8 rounded-xl bg-primary/15 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10 md:w-12 md:h-12">
+              <Image 
+                src="/logo.png" 
+                alt="Logo" 
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             <div className="text-lg md:text-xl font-bold tracking-tight">SperMaxxing</div>
           </div>
