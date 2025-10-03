@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
       .limit(1);
 
     if (existingSettings.length > 0) {
-      return NextResponse.json(existingSettings[0], { status: 200 });
+      return NextResponse.json({ settings: existingSettings[0] }, { status: 200 });
     }
 
     // Create default settings if none exist
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       })
       .returning();
 
-    return NextResponse.json(defaultSettings[0], { status: 200 });
+    return NextResponse.json({ settings: defaultSettings[0] }, { status: 200 });
 
   } catch (error) {
     console.error('GET user settings error:', error);
@@ -140,7 +140,11 @@ export async function PATCH(request: NextRequest) {
         .where(eq(userSettings.userId, userId))
         .returning();
 
-      return NextResponse.json(updatedSettings[0], { status: 200 });
+      return NextResponse.json({ 
+        success: true,
+        settings: updatedSettings[0],
+        message: 'Settings updated successfully'
+      }, { status: 200 });
     } else {
       // Create new settings with updates
       const newSettings = await db.insert(userSettings)
@@ -158,7 +162,11 @@ export async function PATCH(request: NextRequest) {
         })
         .returning();
 
-      return NextResponse.json(newSettings[0], { status: 200 });
+      return NextResponse.json({ 
+        success: true,
+        settings: newSettings[0],
+        message: 'Settings created successfully'
+      }, { status: 200 });
     }
 
   } catch (error) {

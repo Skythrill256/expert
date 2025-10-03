@@ -84,40 +84,40 @@
 }
 
 .dark {
-  /* Minimalist Black & White Dark Mode */
-  --background: oklch(0.0 0 0);  /* #000000 - Pure black background */
-  --foreground: oklch(1.0 0 0);  /* #FFFFFF - Pure white text */
-  --card: oklch(0.08 0 0);  /* #141414 - Very dark gray for cards */
-  --card-foreground: oklch(1.0 0 0);  /* #FFFFFF */
-  --popover: oklch(0.08 0 0);  /* #141414 */
-  --popover-foreground: oklch(1.0 0 0);  /* #FFFFFF */
-  --primary: oklch(1.0 0 0);  /* #FFFFFF - White for primary actions */
-  --primary-foreground: oklch(0.0 0 0);  /* Black text on white */
-  --secondary: oklch(0.12 0 0);  /* Dark gray for secondary */
+  /* Dark Mode = exact inversion of Light Mode values */
+  --background: oklch(0.0 0 0);  /* invert(1.00) */
+  --foreground: oklch(1.0 0 0);  /* invert(0.00) */
+  --card: oklch(0.02 0 0);       /* invert(0.98) */
+  --card-foreground: oklch(1.0 0 0);
+  --popover: oklch(0.0 0 0);     /* invert(1.00) */
+  --popover-foreground: oklch(1.0 0 0);
+  --primary: oklch(1.0 0 0);     /* invert(0.00) */
+  --primary-foreground: oklch(0.0 0 0); /* invert(1.00) */
+  --secondary: oklch(0.05 0 0);  /* invert(0.95) */
   --secondary-foreground: oklch(1.0 0 0);
-  --muted: oklch(0.10 0 0);  /* Very dark gray */
-  --muted-foreground: oklch(0.60 0 0);  /* Medium gray for secondary text */
-  --accent: oklch(0.15 0 0);  /* Dark gray accent */
-  --accent-foreground: oklch(1.0 0 0);  /* White */
-  --destructive: oklch(0.70 0 0);  /* Light gray for destructive actions */
-  --border: oklch(0.18 0 0);  /* Dark gray borders */
-  --input: oklch(0.08 0 0);  /* Very dark gray for inputs */
-  --ring: oklch(1.0 0 0);  /* White ring */
-  --chart-1: oklch(1.0 0 0);  /* White */
-  --chart-2: oklch(0.80 0 0);  /* Light gray */
-  --chart-3: oklch(0.60 0 0);  /* Medium gray */
-  --chart-4: oklch(0.40 0 0);  /* Dark gray */
-  --chart-5: oklch(0.20 0 0);  /* Very dark gray */
-  --sidebar: oklch(0.08 0 0);  /* Very dark gray */
-  --sidebar-foreground: oklch(1.0 0 0);  /* White */
-  --sidebar-primary: oklch(1.0 0 0);  /* White */
-  --sidebar-primary-foreground: oklch(0.0 0 0);
-  --sidebar-accent: oklch(0.12 0 0);  /* Slightly lighter gray for hover */
+  --muted: oklch(0.04 0 0);      /* invert(0.96) */
+  --muted-foreground: oklch(0.55 0 0); /* invert(0.45) */
+  --accent: oklch(0.08 0 0);     /* invert(0.92) */
+  --accent-foreground: oklch(1.0 0 0);
+  --destructive: oklch(0.70 0 0); /* invert(0.30) */
+  --border: oklch(0.10 0 0);     /* invert(0.90) */
+  --input: oklch(0.02 0 0);      /* invert(0.98) */
+  --ring: oklch(1.0 0 0);        /* invert(0.00) */
+  --chart-1: oklch(1.0 0 0);     /* invert(0.00) */
+  --chart-2: oklch(0.80 0 0);    /* invert(0.20) */
+  --chart-3: oklch(0.60 0 0);    /* invert(0.40) */
+  --chart-4: oklch(0.40 0 0);    /* invert(0.60) */
+  --chart-5: oklch(0.20 0 0);    /* invert(0.80) */
+  --sidebar: oklch(0.02 0 0);    /* invert(0.98) */
+  --sidebar-foreground: oklch(1.0 0 0);
+  --sidebar-primary: oklch(1.0 0 0); /* invert(0.00) */
+  --sidebar-primary-foreground: oklch(0.0 0 0); /* invert(1.00) */
+  --sidebar-accent: oklch(0.06 0 0);  /* invert(0.94) */
   --sidebar-accent-foreground: oklch(1.0 0 0);
-  --sidebar-border: oklch(0.18 0 0);  /* Dark gray */
-  --sidebar-ring: oklch(1.0 0 0);  /* White */
-  --glass-bg: oklch(0.0 0 0 / 0.9);  /* Black with transparency */
-  --glass-border: oklch(0.25 0 0 / 0.3);  /* Gray border */
+  --sidebar-border: oklch(0.10 0 0);  /* invert(0.90) */
+  --sidebar-ring: oklch(1.0 0 0);
+  --glass-bg: oklch(0.0 0 0 / 0.9);  /* invert of white glass */
+  --glass-border: oklch(0.15 0 0 / 0.3);  /* invert(0.85) */
 }
 
 @layer base {
@@ -155,11 +155,11 @@
 
   .dark .gradient-mesh {
     background: 
-      radial-gradient(at 27% 37%, oklch(0.10 0 0 / 0.5) 0px, transparent 50%),
-      radial-gradient(at 97% 21%, oklch(0.08 0 0 / 0.4) 0px, transparent 50%),
-      radial-gradient(at 52% 99%, oklch(0.12 0 0 / 0.5) 0px, transparent 50%),
-      radial-gradient(at 10% 29%, oklch(0.06 0 0 / 0.3) 0px, transparent 50%),
-      radial-gradient(at 97% 96%, oklch(0.10 0 0 / 0.4) 0px, transparent 50%);
+      radial-gradient(at 27% 37%, oklch(0.05 0 0 / 0.5) 0px, transparent 50%),  /* invert(0.95) */
+      radial-gradient(at 97% 21%, oklch(0.04 0 0 / 0.4) 0px, transparent 50%),  /* invert(0.96) */
+      radial-gradient(at 52% 99%, oklch(0.06 0 0 / 0.5) 0px, transparent 50%),  /* invert(0.94) */
+      radial-gradient(at 10% 29%, oklch(0.03 0 0 / 0.3) 0px, transparent 50%),  /* invert(0.97) */
+      radial-gradient(at 97% 96%, oklch(0.05 0 0 / 0.4) 0px, transparent 50%);  /* invert(0.95) */
   }
   
   .smooth-transition {
@@ -272,15 +272,28 @@ nextjs-portal {
     radial-gradient(at 90% 85%, oklch(0.60 0.05 123 / 0.08) 0px, transparent 55%);
 }
 
+.dark .dashboard-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(at 20% 15%, oklch(0.23 0.05 115 / 0.12) 0px, transparent 45%), /* invert(0.77) */
+    radial-gradient(at 85% 10%, oklch(0.17 0.04 118 / 0.10) 0px, transparent 50%), /* invert(0.83) */
+    radial-gradient(at 10% 85%, oklch(0.35 0.05 122 / 0.09) 0px, transparent 55%), /* invert(0.65) */
+    radial-gradient(at 90% 85%, oklch(0.40 0.05 123 / 0.08) 0px, transparent 55%); /* invert(0.60) */
+}
+
 /* Pill-styled sidebar container */
 .sidebar-pill {
-  border-radius: 1.5rem;
-  /* Mobile: overlay positioning */
+  /* Mobile: overlay positioning - full height with rounded right edge */
+  border-radius: 0 1.5rem 1.5rem 0;
   top: 0;
   bottom: 0;
   height: 100vh;
   margin: 0;
-  box-shadow: 0 24px 60px -24px oklch(0 0 0 / 0.35);
+  transform: none;
+  box-shadow: 4px 0 24px -4px oklch(0 0 0 / 0.2);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -289,9 +302,11 @@ nextjs-portal {
 @media (min-width: 1024px) {
   .sidebar-pill {
     border-radius: 2rem;
-    top: 1rem;
-    bottom: 1rem;
-    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
+    height: 85vh;
+    max-height: 700px;
     margin: 0 0 0 1rem;
     box-shadow: 0 24px 60px -24px oklch(0 0 0 / 0.25);
     overflow-y: hidden;
@@ -304,4 +319,13 @@ nextjs-portal {
 }
 .focus-ring:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 45%, transparent), 0 0 0 6px color-mix(in oklch, var(--ring) 15%, transparent);
+}
+
+/* Utility: hide scrollbars but keep scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

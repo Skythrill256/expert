@@ -61,7 +61,7 @@ export default function Sidebar() {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-label={isOpen ? "Close menu" : "Open menu"}
-        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 glass-card border rounded-full shadow-lg flex items-center justify-center"
+  className="lg:hidden fixed top-3 left-3 z-50 w-10 h-10 glass-card border rounded-full shadow-lg flex items-center justify-center"
       >
         <span className="sr-only">{isOpen ? 'Close menu' : 'Open menu'}</span>
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -79,25 +79,25 @@ export default function Sidebar() {
       <aside
         className={cn(
           "fixed left-0 transition-all duration-300 ease-in-out",
-          "sidebar-pill glass-card border",
+          "sidebar-pill glass-card border-r border-t-0 border-b-0 border-l-0 lg:border",
           // Mobile: full width overlay sidebar
           "lg:translate-x-0",
-          isOpen ? "translate-x-0 z-50 w-64" : "-translate-x-full z-50 w-64",
+          isOpen ? "translate-x-0 z-50 w-72" : "-translate-x-full z-50 w-72",
           // Desktop: fixed sidebar with collapse
           "lg:z-40",
-          isCollapsed ? "lg:w-[4.5rem] lg:px-2.5 lg:py-5" : "lg:w-64 lg:px-5 lg:py-5",
-          // Mobile always expanded style
-          "px-5 py-5 lg:px-5 lg:py-5"
+          isCollapsed ? "lg:w-[4.5rem] lg:px-2.5 lg:py-3" : "lg:w-64 lg:px-5 lg:py-3",
+          // Mobile: better spacing
+          "px-6 py-6 lg:px-5 lg:py-3"
         )}
         aria-label="Primary"
       >
         <div className="flex flex-col h-full">
           {/* Header with Logo */}
-          <div className="mb-8 flex items-center justify-center transition-all duration-300">
+          <div className="mb-8 lg:mb-4 flex items-center justify-center transition-all duration-300">
             <Link href="/dashboard" className="flex items-center group">
               <div className={cn(
                 "relative transition-all duration-300 hover:scale-110",
-                isCollapsed ? "w-10 h-10" : "w-12 h-12"
+                isCollapsed ? "w-16 h-16 lg:w-16 lg:h-16" : "w-32 h-32 lg:w-20 lg:h-20"
               )}>
                 <Image 
                   src="/logo.png" 
@@ -112,8 +112,8 @@ export default function Sidebar() {
 
           {/* Navigation */}
           <nav className={cn(
-            "flex-1 flex flex-col",
-            isCollapsed ? "lg:space-y-3" : "space-y-2"
+            "flex-1 flex flex-col justify-center",
+            isCollapsed ? "lg:space-y-2" : "space-y-4 lg:space-y-1.5"
           )}>
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -125,22 +125,22 @@ export default function Sidebar() {
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     // Rounded/pill nav items similar to reference
-                    "flex items-center rounded-full smooth-transition group relative overflow-hidden focus-ring",
+                    "flex items-center smooth-transition group relative overflow-hidden focus-ring",
                     isActive
                       ? "bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
                       : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground",
-                    // Mobile: always show text with padding and gap
-                    "px-5 py-3 gap-3",
+                    // Mobile: much larger touch targets
+                    "px-7 py-5 gap-5 rounded-full text-lg font-medium",
                     // Desktop: conditional styling based on collapse state
                     isCollapsed 
-                      ? "lg:justify-center lg:h-11 lg:w-full lg:px-0 lg:gap-0" 
-                      : "lg:px-5 lg:py-3 lg:gap-3"
+                      ? "lg:justify-center lg:h-10 lg:w-10 lg:rounded-full lg:px-0 lg:gap-0 lg:mx-auto lg:text-sm lg:font-medium" 
+                      : "lg:px-5 lg:py-2.5 lg:gap-3 lg:rounded-full lg:text-sm lg:font-medium"
                   )}
                 >
-                  <Icon className="w-5 h-5 shrink-0" />
+                  <Icon className="w-7 h-7 lg:w-5 lg:h-5 shrink-0" />
                   {/* Always show text on mobile, conditionally on desktop */}
                   <span className={cn(
-                    "font-medium whitespace-nowrap",
+                    "whitespace-nowrap",
                     isCollapsed && "lg:hidden"
                   )}>
                     {item.name}
@@ -160,17 +160,19 @@ export default function Sidebar() {
 
           {/* Theme Toggle & User info */}
           <div className={cn(
-            "pt-4 border-t border-border/50 flex flex-col",
-            isCollapsed ? "space-y-3" : "space-y-3"
+            "pt-6 lg:pt-3 border-t border-border/50 flex flex-col",
+            isCollapsed ? "space-y-2" : "space-y-4 lg:space-y-2"
           )}>
             {/* Theme Toggle */}
             <div className="relative group">
               <Button
                 variant="outline"
                 className={cn(
-                  "w-full h-11 hover:bg-accent/60 border-border/50 rounded-full",
+                  "w-full hover:bg-accent/60 border-border/50 rounded-full",
+                  // Mobile: much larger touch target
+                  "h-16 px-7 gap-5 text-lg font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
                   // Mobile: always show text with proper layout
-                  "flex items-center justify-start px-4 gap-3",
+                  "flex items-center justify-start",
                   // Desktop: conditional styling based on collapse state
                   isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                 )}
@@ -178,14 +180,13 @@ export default function Sidebar() {
               >
                 {mounted && (
                   theme === "dark" ? (
-                    <Sun className="w-5 h-5 shrink-0" />
+                    <Sun className="w-7 h-7 lg:w-5 lg:h-5 shrink-0" />
                   ) : (
-                    <Moon className="w-5 h-5 shrink-0" />
+                    <Moon className="w-7 h-7 lg:w-5 lg:h-5 shrink-0" />
                   )
                 )}
                 {/* Always show text on mobile, conditionally on desktop */}
                 <span className={cn(
-                  "font-medium",
                   isCollapsed && "lg:hidden"
                 )}>
                   {mounted && (theme === "dark" ? "Light Mode" : "Dark Mode")}
@@ -218,14 +219,14 @@ export default function Sidebar() {
               <>
                 <div className={cn(
                   "relative group flex items-center rounded-full glass hover:bg-accent/30 smooth-transition cursor-pointer",
-                  // Mobile: always show with proper spacing
-                  "gap-3 p-2.5 pl-2.5 pr-3",
+                  // Mobile: much larger spacing
+                  "gap-4 p-4 pl-4 pr-5 lg:gap-2.5 lg:p-2 lg:pl-2 lg:pr-2.5",
                   // Desktop: conditional styling based on collapse state
-                  isCollapsed && "lg:justify-center lg:p-2 lg:gap-0"
+                  isCollapsed && "lg:justify-center lg:p-1.5 lg:gap-0"
                 )}>
-                  <Avatar className="w-10 h-10 shrink-0 ring-2 ring-border/50">
+                  <Avatar className="w-14 h-14 lg:w-9 lg:h-9 shrink-0 ring-2 ring-border/50">
                     <AvatarImage src={session.user.image || undefined} alt={session.user.name || "User"} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-chart-2 text-white font-semibold text-sm">
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-chart-2 text-white font-semibold text-lg lg:text-sm">
                       {getInitials(session.user.name || "User")}
                     </AvatarFallback>
                   </Avatar>
@@ -234,8 +235,8 @@ export default function Sidebar() {
                     "flex-1 min-w-0",
                     isCollapsed && "lg:hidden"
                   )}>
-                    <p className="text-sm font-medium truncate">{session.user.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+                    <p className="text-lg lg:text-sm font-medium truncate">{session.user.name}</p>
+                    <p className="text-base lg:text-xs text-muted-foreground truncate">{session.user.email}</p>
                   </div>
                   
                   {/* Tooltip for collapsed state on desktop only */}
@@ -252,18 +253,19 @@ export default function Sidebar() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full h-11 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 border-border/50 smooth-transition rounded-full",
+                      "w-full hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 border-border/50 smooth-transition rounded-full",
+                      // Mobile: much larger touch target
+                      "h-16 px-7 gap-5 text-lg font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
                       // Mobile: always show text with proper layout
-                      "flex items-center justify-start px-4 gap-3",
+                      "flex items-center justify-start",
                       // Desktop: conditional styling based on collapse state
                       isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                     )}
                     onClick={handleSignOut}
                   >
-                    <LogOut className="w-5 h-5 shrink-0" />
+                    <LogOut className="w-7 h-7 lg:w-5 lg:h-5 shrink-0" />
                     {/* Always show text on mobile, conditionally on desktop */}
                     <span className={cn(
-                      "font-medium",
                       isCollapsed && "lg:hidden"
                     )}>
                       Sign Out
@@ -284,18 +286,19 @@ export default function Sidebar() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full h-11 hover:bg-accent/50 border-border/50 rounded-full",
+                    "w-full hover:bg-accent/50 border-border/50 rounded-full",
+                    // Mobile: much larger touch target
+                    "h-16 px-7 gap-5 text-lg font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
                     // Mobile: always show text with proper layout
-                    "flex items-center justify-start px-4 gap-3",
+                    "flex items-center justify-start",
                     // Desktop: conditional styling based on collapse state
                     isCollapsed && "lg:justify-center lg:px-0 lg:gap-0"
                   )}
                   onClick={() => router.push("/login")}
                 >
-                  <LogOut className="w-5 h-5 shrink-0" />
+                  <LogOut className="w-7 h-7 lg:w-5 lg:h-5 shrink-0" />
                   {/* Always show text on mobile, conditionally on desktop */}
                   <span className={cn(
-                    "font-medium",
                     isCollapsed && "lg:hidden"
                   )}>
                     Sign In

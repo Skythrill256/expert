@@ -236,19 +236,19 @@ DFI: ${manualData.dfi}%
       
       <PageLayout>
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold mb-2">Upload Lab Report</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8 animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Upload Lab Report</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Add your latest sperm analysis results and answer lifestyle questions
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto px-3 sm:px-0">
           {/* Lifestyle Questions Section */}
-          <div className="glass-card rounded-2xl p-8 border border-border/50 mb-8 animate-fade-in">
+          <div className="glass-card rounded-2xl p-5 sm:p-8 border border-border/50 mb-6 sm:mb-8 animate-fade-in">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Lifestyle Questions</h2>
-              <p className="text-muted-foreground text-sm">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Lifestyle Questions</h2>
+              <p className="text-muted-foreground text-xs sm:text-sm">
                 Answer these quick questions to help our AI provide personalized recommendations
               </p>
             </div>
@@ -257,12 +257,12 @@ DFI: ${manualData.dfi}%
               {lifestyleQuestions.map((question) => {
                 const selectedValue = lifestyleData[question.key as keyof typeof lifestyleData];
                 return (
-                  <div key={question.key} className="glass-card rounded-2xl p-5 space-y-4">
+                  <div key={question.key} className="glass-card rounded-2xl p-4 sm:p-5 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                         {question.icon}
                       </div>
-                      <Label className="font-semibold text-base">{question.question}</Label>
+                      <Label className="font-semibold text-sm sm:text-base">{question.question}</Label>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {question.options.map((option, idx) => (
@@ -318,13 +318,13 @@ DFI: ${manualData.dfi}%
 
             {/* PDF Upload Tab */}
             <TabsContent value="upload" className="animate-fade-in">
-              <div className="glass-card rounded-2xl p-8 border border-border/50">
-                <div className="border-2 border-dashed border-primary/30 rounded-2xl p-16 text-center hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
-                  <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center mb-6 shadow-lg">
-                    <Upload className="w-10 h-10 text-primary" />
+              <div className="glass-card rounded-2xl p-5 sm:p-8 border border-border/50">
+                <div className="border-2 border-dashed border-primary/30 rounded-2xl p-6 sm:p-12 text-center hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 cursor-pointer">
+                  <div className="mx-auto w-14 h-14 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/20 flex items-center justify-center mb-4 sm:mb-6 shadow-lg">
+                    <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">Upload Lab Report</h3>
-                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Upload Lab Report</h3>
+                  <p className="text-muted-foreground text-sm sm:text-base mb-6 sm:mb-8 max-w-md mx-auto">
                     Select your PDF or image file to automatically extract biomarkers using AI
                   </p>
                   
@@ -355,9 +355,9 @@ DFI: ${manualData.dfi}%
                       </p>
                     </div>
                   ) : (
-                    <div className="max-w-lg mx-auto space-y-6">
-                      <div className="flex items-center gap-4 p-5 rounded-xl glass-card border border-primary/30">
-                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <div className="max-w-md sm:max-w-lg mx-auto space-y-6">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl glass-card border border-primary/30 w-full">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                           <FileText className="w-6 h-6 text-primary" />
                         </div>
                         <div className="flex-1 text-left min-w-0">
@@ -371,7 +371,7 @@ DFI: ${manualData.dfi}%
                           size="icon"
                           onClick={() => setSelectedFile(null)}
                           disabled={uploading}
-                          className="shrink-0"
+                          className="shrink-0 self-end sm:self-auto"
                         >
                           <X className="w-5 h-5" />
                         </Button>
@@ -413,9 +413,9 @@ DFI: ${manualData.dfi}%
 
             {/* Manual Entry Tab */}
             <TabsContent value="manual" className="animate-fade-in">
-              <form onSubmit={handleManualSubmit} className="glass-card rounded-2xl p-8 border border-border/50">
+              <form onSubmit={handleManualSubmit} className="glass-card rounded-2xl p-5 sm:p-8 border border-border/50">
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold mb-2">Enter Lab Results Manually</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2">Enter Lab Results Manually</h2>
                   <p className="text-muted-foreground text-sm">Fill in your sperm analysis parameters below</p>
                 </div>
                 
@@ -587,17 +587,17 @@ DFI: ${manualData.dfi}%
           </Tabs>
 
           {/* Info Card */}
-          <div className="mt-8 glass-card rounded-2xl p-8 border border-primary/20 bg-gradient-to-br from-primary/5 to-chart-2/5">
+          <div className="mt-6 sm:mt-8 glass-card rounded-2xl p-6 sm:p-8 border border-primary/20 bg-gradient-to-br from-primary/5 to-chart-2/5">
             <div className="flex items-start gap-4 mb-4">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-1">Understanding Your Results</h3>
-                <p className="text-sm text-muted-foreground">Reference ranges for sperm analysis parameters</p>
+                <h3 className="font-bold text-base sm:text-lg mb-1">Understanding Your Results</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Reference ranges for sperm analysis parameters</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <div>
