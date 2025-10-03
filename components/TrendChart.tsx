@@ -48,21 +48,24 @@ export default function TrendChart({ data }: TrendChartProps) {
   const tickFontSize = isMobile ? 10 : 12;
 
   return (
-    <div className="glass-card rounded-2xl p-4 sm:p-6 animate-fade-in">
-      <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl font-bold">Health Score Trend</h2>
-        <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs flex-wrap">
+    <div className="animate-fade-in">
+      <div className="flex items-center justify-between mb-3 sm:mb-4 md:mb-6">
+        <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold">Health Score Trend</h2>
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs flex-wrap">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <span className="text-muted-foreground">Excellent habits</span>
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500"></div>
+            <span className="text-muted-foreground hidden md:inline">Excellent habits</span>
+            <span className="text-muted-foreground md:hidden">Excellent</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-lime-500"></div>
-            <span className="text-muted-foreground">Good habits</span>
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-lime-500"></div>
+            <span className="text-muted-foreground hidden md:inline">Good habits</span>
+            <span className="text-muted-foreground md:hidden">Good</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <span className="text-muted-foreground">Fair habits</span>
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500"></div>
+            <span className="text-muted-foreground hidden md:inline">Fair habits</span>
+            <span className="text-muted-foreground md:hidden">Fair</span>
           </div>
         </div>
       </div>

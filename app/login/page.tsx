@@ -1,22 +1,47 @@
 "use client";
 
 import { SignIn } from '@clerk/nextjs';
-import { Shield } from "lucide-react";
+import { Shield, Moon, Sun } from "lucide-react";
 import { useTheme } from 'next-themes';
 import { dark } from '@clerk/themes';
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 export default function LoginPage() {
-  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const isDark = theme === 'dark' || resolvedTheme === 'dark';
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="min-h-screen gradient-mesh flex items-center justify-center p-4">
+    <div className="min-h-screen gradient-mesh flex items-center justify-center p-4 relative">
+      {/* Theme Toggle - Top Right */}
+      {mounted && (
+        <div className="absolute top-4 right-4 md:top-6 md:right-6">
+          <Button
+            variant="outline"
+            size="icon"
+            className="glass"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        </div>
+      )}
+
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-chart-2 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to continue tracking your health</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome Back</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Sign in to continue tracking your health</p>
         </div>
 
         {/* Clerk Sign In Component */}
@@ -36,8 +61,7 @@ export default function LoginPage() {
                 identityPreviewEditButton: "text-muted-foreground hover:text-foreground",
               },
             }}
-            routing="path"
-            path="/login"
+            routing="hash"
             signUpUrl="/register"
             forceRedirectUrl="/dashboard"
           />

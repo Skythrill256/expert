@@ -236,7 +236,7 @@ DFI: ${manualData.dfi}%
       
       <PageLayout>
         {/* Header */}
-        <div className="mb-6 sm:mb-8 animate-fade-in">
+        <div className="mb-6 sm:mb-8 animate-fade-in pl-12 sm:pl-0">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2">Upload Lab Report</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
             Add your latest sperm analysis results and answer lifestyle questions

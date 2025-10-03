@@ -118,34 +118,34 @@ export default function RecommendationsPage() {
       
       <PageLayout>
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold mb-2">Personalized Recommendations</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 md:mb-8 animate-fade-in">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Personalized Recommendations</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             Evidence-based strategies to improve your health
           </p>
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="glass-card rounded-xl p-4">
-            <p className="text-sm text-muted-foreground mb-1">Total Actions</p>
-            <p className="text-2xl font-bold">{recommendations.length}</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+          <div className="glass-card rounded-lg md:rounded-xl p-3 md:p-4">
+            <p className="text-xs md:text-sm text-muted-foreground mb-1">Total Actions</p>
+            <p className="text-xl md:text-2xl font-bold">{recommendations.length}</p>
           </div>
-          <div className="glass-card rounded-xl p-4">
-            <p className="text-sm text-muted-foreground mb-1">Active</p>
-            <p className="text-2xl font-bold text-primary">
+          <div className="glass-card rounded-lg md:rounded-xl p-3 md:p-4">
+            <p className="text-xs md:text-sm text-muted-foreground mb-1">Active</p>
+            <p className="text-xl md:text-2xl font-bold text-primary">
               {recommendations.filter(r => r.status === 'active').length}
             </p>
           </div>
-          <div className="glass-card rounded-xl p-4">
-            <p className="text-sm text-muted-foreground mb-1">Completed</p>
-            <p className="text-2xl font-bold text-green-500">
+          <div className="glass-card rounded-lg md:rounded-xl p-3 md:p-4">
+            <p className="text-xs md:text-sm text-muted-foreground mb-1">Completed</p>
+            <p className="text-xl md:text-2xl font-bold text-green-500">
               {recommendations.filter(r => r.status === 'completed').length}
             </p>
           </div>
-          <div className="glass-card rounded-xl p-4">
-            <p className="text-sm text-muted-foreground mb-1">High Priority</p>
-            <p className="text-2xl font-bold text-orange-500">
+          <div className="glass-card rounded-lg md:rounded-xl p-3 md:p-4">
+            <p className="text-xs md:text-sm text-muted-foreground mb-1">High Priority</p>
+            <p className="text-xl md:text-2xl font-bold text-orange-500">
               {recommendations.filter(r => r.priority === 'high').length}
             </p>
           </div>
@@ -154,59 +154,59 @@ export default function RecommendationsPage() {
         {/* Filters */}
         <div className="mb-6">
           <Tabs defaultValue="all" value={filter} onValueChange={setFilter}>
-            <TabsList className="glass">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="diet">Diet</TabsTrigger>
-              <TabsTrigger value="supplements">Supplements</TabsTrigger>
-              <TabsTrigger value="exercise">Exercise</TabsTrigger>
-              <TabsTrigger value="sleep">Sleep</TabsTrigger>
-              <TabsTrigger value="stress">Stress</TabsTrigger>
-              <TabsTrigger value="lifestyle">Lifestyle</TabsTrigger>
+            <TabsList className="glass h-auto flex-wrap gap-2 p-2">
+              <TabsTrigger value="all" className="text-xs sm:text-sm">All</TabsTrigger>
+              <TabsTrigger value="diet" className="text-xs sm:text-sm">Diet</TabsTrigger>
+              <TabsTrigger value="supplements" className="text-xs sm:text-sm">Supplements</TabsTrigger>
+              <TabsTrigger value="exercise" className="text-xs sm:text-sm">Exercise</TabsTrigger>
+              <TabsTrigger value="sleep" className="text-xs sm:text-sm">Sleep</TabsTrigger>
+              <TabsTrigger value="stress" className="text-xs sm:text-sm">Stress</TabsTrigger>
+              <TabsTrigger value="lifestyle" className="text-xs sm:text-sm">Lifestyle</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         {/* Recommendations List */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {filteredRecommendations.map((rec, index) => (
             <div
               key={rec.id}
-              className="glass-card rounded-2xl p-6 hover-lift animate-fade-in"
+              className="glass-card rounded-xl md:rounded-2xl p-4 md:p-6 hover-lift animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+              <div className="flex flex-col sm:flex-row items-start gap-3 md:gap-4">
+                <div className="w-10 h-10 md:w-11 md:h-11 rounded-lg md:rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   {typeIcons[rec.recommendationType || "lifestyle"]}
                 </div>
                 
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{rec.title}</h3>
-                      <div className="flex items-center gap-2">
+                <div className="flex-1 w-full">
+                  <div className="flex items-start justify-between mb-3 gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg md:text-xl font-semibold mb-2">{rec.title}</h3>
+                      <div className="flex flex-wrap items-center gap-2">
                         <Badge
                           variant="outline"
                           className={cn(
-                            "capitalize",
+                            "capitalize text-xs",
                             priorityColors[(rec.priority || "low") as keyof typeof priorityColors]
                           )}
                         >
                           {rec.priority || "low"} priority
                         </Badge>
-                        <Badge variant="outline" className="capitalize">
+                        <Badge variant="outline" className="capitalize text-xs">
                           {rec.recommendationType || "general"}
                         </Badge>
                       </div>
                     </div>
                     
                     {rec.status === "completed" ? (
-                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                      <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-green-500 shrink-0" />
                     ) : (
-                      <Circle className="w-6 h-6 text-muted-foreground" />
+                      <Circle className="w-5 h-5 md:w-6 md:h-6 text-muted-foreground shrink-0" />
                     )}
                   </div>
                   
-                  <p className="text-muted-foreground mb-4 leading-relaxed whitespace-pre-line">
+                  <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed whitespace-pre-line">
                     {rec.description}
                   </p>
                   
@@ -215,6 +215,7 @@ export default function RecommendationsPage() {
                       size="sm" 
                       variant={rec.status === "completed" ? "outline" : "default"}
                       onClick={() => handleStatusChange(rec.id, rec.status === "completed" ? "active" : "completed")}
+                      className="text-xs md:text-sm"
                     >
                       {rec.status === "completed" ? "Mark as Active" : "Mark as Completed"}
                     </Button>
@@ -226,10 +227,10 @@ export default function RecommendationsPage() {
         </div>
 
         {filteredRecommendations.length === 0 && (
-          <div className="glass-card rounded-2xl p-12 text-center animate-fade-in">
-            <Lightbulb className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No recommendations yet</h3>
-            <p className="text-muted-foreground">
+          <div className="glass-card rounded-xl md:rounded-2xl p-8 md:p-12 text-center animate-fade-in">
+            <Lightbulb className="w-12 h-12 md:w-16 md:h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg md:text-xl font-semibold mb-2">No recommendations yet</h3>
+            <p className="text-sm md:text-base text-muted-foreground">
               Upload a report to get personalized recommendations
             </p>
           </div>

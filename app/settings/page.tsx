@@ -150,17 +150,17 @@ export default function SettingsPage() {
 
         <div className="max-w-5xl mx-auto">
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="glass-card mb-6 sm:mb-8 w-full justify-start overflow-x-auto no-scrollbar p-1.5 rounded-2xl">
-              <TabsTrigger value="profile" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <User className="w-4 h-4" />
+            <TabsList className="glass-card mb-6 sm:mb-8 w-full justify-start p-2 rounded-2xl flex flex-wrap gap-2 h-auto">
+              <TabsTrigger value="profile" className="flex items-center gap-2 text-xs sm:text-sm px-3 sm:px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap">
+                <User className="w-4 h-4 shrink-0" />
                 <span>Profile</span>
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Bell className="w-4 h-4" />
+              <TabsTrigger value="notifications" className="flex items-center gap-2 text-xs sm:text-sm px-3 sm:px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap">
+                <Bell className="w-4 h-4 shrink-0" />
                 <span>Notifications</span>
               </TabsTrigger>
-              <TabsTrigger value="appearance" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Palette className="w-4 h-4" />
+              <TabsTrigger value="appearance" className="flex items-center gap-2 text-xs sm:text-sm px-3 sm:px-4 py-2.5 rounded-xl data-[state=active]:bg-primary data-[state=active]:text-primary-foreground whitespace-nowrap">
+                <Palette className="w-4 h-4 shrink-0" />
                 <span>Appearance</span>
               </TabsTrigger>
             </TabsList>
@@ -315,25 +315,25 @@ export default function SettingsPage() {
 
             {/* Appearance Tab */}
             <TabsContent value="appearance" className="animate-fade-in">
-              <div className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+              <div className="glass-card rounded-3xl p-4 sm:p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-8">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/10 flex items-center justify-center">
-                      <Palette className="w-6 h-6 text-primary" />
+                  <div className="flex items-center gap-3 mb-6 sm:mb-8">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-chart-2/10 flex items-center justify-center shrink-0">
+                      <Palette className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold">Appearance</h2>
-                      <p className="text-sm text-muted-foreground">Customize your experience</p>
+                    <div className="min-w-0">
+                      <h2 className="text-xl sm:text-2xl font-bold">Appearance</h2>
+                      <p className="text-xs sm:text-sm text-muted-foreground">Customize your experience</p>
                     </div>
                   </div>
                   
-                  <div className="space-y-8">
+                  <div className="space-y-6 sm:space-y-8">
                     <div>
-                      <Label className="mb-4 block text-base font-semibold">Theme</Label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <Label className="mb-3 sm:mb-4 block text-sm sm:text-base font-semibold">Theme</Label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                         <button 
-                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                          className={`group p-4 sm:p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
                             systemTheme === 'light' ? 'border-primary' : 'border-transparent'
                           }`}
                           onClick={() => {
@@ -341,12 +341,12 @@ export default function SettingsPage() {
                             setSettingsData({ ...settingsData, theme: 'light' });
                           }}
                         >
-                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-white to-gray-100 mb-3 border border-border shadow-inner"></div>
+                          <div className="w-full h-20 sm:h-24 rounded-xl bg-gradient-to-br from-white to-gray-100 mb-3 border border-border shadow-inner"></div>
                           <p className="text-sm font-semibold mb-1">Light</p>
                           <p className="text-xs text-muted-foreground">Bright and clear</p>
                         </button>
                         <button 
-                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                          className={`group p-4 sm:p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
                             systemTheme === 'dark' ? 'border-primary' : 'border-transparent'
                           }`}
                           onClick={() => {
@@ -354,12 +354,12 @@ export default function SettingsPage() {
                             setSettingsData({ ...settingsData, theme: 'dark' });
                           }}
                         >
-                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-gray-900 to-black mb-3 border border-border shadow-inner"></div>
+                          <div className="w-full h-20 sm:h-24 rounded-xl bg-gradient-to-br from-gray-900 to-black mb-3 border border-border shadow-inner"></div>
                           <p className="text-sm font-semibold mb-1">Dark</p>
                           <p className="text-xs text-muted-foreground">Easy on the eyes</p>
                         </button>
                         <button 
-                          className={`group p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
+                          className={`group p-4 sm:p-5 rounded-2xl glass-card hover-lift smooth-transition border-2 ${
                             systemTheme === 'system' ? 'border-primary' : 'border-transparent'
                           }`}
                           onClick={() => {
@@ -367,7 +367,7 @@ export default function SettingsPage() {
                             setSettingsData({ ...settingsData, theme: 'system' });
                           }}
                         >
-                          <div className="w-full h-24 rounded-xl bg-gradient-to-br from-white via-gray-400 to-black mb-3 border border-border shadow-inner"></div>
+                          <div className="w-full h-20 sm:h-24 rounded-xl bg-gradient-to-br from-white via-gray-400 to-black mb-3 border border-border shadow-inner"></div>
                           <p className="text-sm font-semibold mb-1">System</p>
                           <p className="text-xs text-muted-foreground">Matches device</p>
                         </button>
