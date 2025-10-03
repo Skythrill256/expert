@@ -130,7 +130,7 @@ export default function TrendChart({ data }: TrendChartProps) {
           <Scatter
             dataKey="adjustedScore"
             fill="#8884d8"
-            shape={(props) => <CustomDot {...props} r={isMobile ? 4 : 5} />}
+            shape={(props: any) => <CustomDot {...props} r={isMobile ? 4 : 5} />}
             name="Lifestyle Quality"
           />
         </ComposedChart>
