@@ -48,9 +48,9 @@
 :root {
   --radius: 1rem;
   /* Minimalist Black & White Light Mode */
-  --background: oklch(0.98 0 0);  /* #FAFAFA - Very light gray for background */
+  --background: oklch(1.0 0 0);  /* #FFFFFF - Pure white background */
   --foreground: oklch(0.0 0 0);  /* #000000 - Pure black text */
-  --card: oklch(1.0 0 0);  /* #FFFFFF - Pure white for cards */
+  --card: oklch(0.98 0 0);  /* #FAFAFA - Very light gray for cards */
   --card-foreground: oklch(0.0 0 0);  /* #000000 */
   --popover: oklch(1.0 0 0);  /* #FFFFFF */
   --popover-foreground: oklch(0.0 0 0);  /* #000000 */
@@ -84,40 +84,40 @@
 }
 
 .dark {
-  /* Dark Mode = exact inversion of Light Mode values */
-  --background: oklch(0.14 0 0);  /* slightly darker gray for background */
-  --foreground: oklch(1.0 0 0);  /* invert(0.00) */
-  --card: oklch(0.0 0 0);       /* pure black for cards */
-  --card-foreground: oklch(1.0 0 0);
-  --popover: oklch(0.0 0 0);     /* invert(1.00) */
-  --popover-foreground: oklch(1.0 0 0);
-  --primary: oklch(1.0 0 0);     /* invert(0.00) */
-  --primary-foreground: oklch(0.0 0 0); /* invert(1.00) */
-  --secondary: oklch(0.05 0 0);  /* invert(0.95) */
-  --secondary-foreground: oklch(1.0 0 0);
-  --muted: oklch(0.04 0 0);      /* invert(0.96) */
-  --muted-foreground: oklch(0.55 0 0); /* invert(0.45) */
-  --accent: oklch(0.08 0 0);     /* invert(0.92) */
-  --accent-foreground: oklch(1.0 0 0);
-  --destructive: oklch(0.70 0 0); /* invert(0.30) */
-  --border: oklch(0.10 0 0);     /* invert(0.90) */
-  --input: oklch(0.02 0 0);      /* invert(0.98) */
-  --ring: oklch(1.0 0 0);        /* invert(0.00) */
-  --chart-1: oklch(1.0 0 0);     /* invert(0.00) */
-  --chart-2: oklch(0.80 0 0);    /* invert(0.20) */
-  --chart-3: oklch(0.60 0 0);    /* invert(0.40) */
-  --chart-4: oklch(0.40 0 0);    /* invert(0.60) */
-  --chart-5: oklch(0.20 0 0);    /* invert(0.80) */
-  --sidebar: oklch(0.02 0 0);    /* invert(0.98) */
-  --sidebar-foreground: oklch(1.0 0 0);
-  --sidebar-primary: oklch(1.0 0 0); /* invert(0.00) */
-  --sidebar-primary-foreground: oklch(0.0 0 0); /* invert(1.00) */
-  --sidebar-accent: oklch(0.06 0 0);  /* invert(0.94) */
-  --sidebar-accent-foreground: oklch(1.0 0 0);
-  --sidebar-border: oklch(0.10 0 0);  /* invert(0.90) */
-  --sidebar-ring: oklch(1.0 0 0);
-  --glass-bg: oklch(0.0 0 0 / 0.9);  /* invert of white glass */
-  --glass-border: oklch(0.15 0 0 / 0.3);  /* invert(0.85) */
+  /* Dark Mode = soft and gentle on the eyes */
+  --background: oklch(0.25 0 0);  /* Soft medium gray background */
+  --foreground: oklch(0.88 0 0);  /* Warm, soft off-white text */
+  --card: oklch(0.32 0 0);       /* Very soft gray for cards */
+  --card-foreground: oklch(0.88 0 0);
+  --popover: oklch(0.25 0 0);     /* Match background */
+  --popover-foreground: oklch(0.88 0 0);
+  --primary: oklch(0.88 0 0);     /* Soft light primary */
+  --primary-foreground: oklch(0.25 0 0); /* Soft dark text on light primary */
+  --secondary: oklch(0.35 0 0);  /* Soft secondary */
+  --secondary-foreground: oklch(0.88 0 0);
+  --muted: oklch(0.33 0 0);      /* Soft muted */
+  --muted-foreground: oklch(0.72 0 0); /* Soft muted text */
+  --accent: oklch(0.38 0 0);     /* Soft accent */
+  --accent-foreground: oklch(0.88 0 0);
+  --destructive: oklch(0.68 0 0); /* Soft destructive */
+  --border: oklch(0.38 0 0);     /* Soft borders */
+  --input: oklch(0.28 0 0);      /* Soft input backgrounds */
+  --ring: oklch(0.88 0 0);        /* Soft ring */
+  --chart-1: oklch(0.88 0 0);     /* Soft chart colors */
+  --chart-2: oklch(0.68 0 0);    /* Medium soft */
+  --chart-3: oklch(0.48 0 0);    /* Medium */
+  --chart-4: oklch(0.40 0 0);    /* Medium soft dark */
+  --chart-5: oklch(0.30 0 0);    /* Soft dark */
+  --sidebar: oklch(0.27 0 0);    /* Soft sidebar background */
+  --sidebar-foreground: oklch(0.88 0 0);
+  --sidebar-primary: oklch(0.88 0 0); /* Soft primary */
+  --sidebar-primary-foreground: oklch(0.25 0 0); /* Soft dark text */
+  --sidebar-accent: oklch(0.33 0 0);  /* Soft accent */
+  --sidebar-accent-foreground: oklch(0.88 0 0);
+  --sidebar-border: oklch(0.38 0 0);  /* Soft border */
+  --sidebar-ring: oklch(0.88 0 0);
+  --glass-bg: oklch(0.25 0 0 / 0.9);  /* Soft glass background */
+  --glass-border: oklch(0.40 0 0 / 0.3);  /* Soft glass border */
 }
 
 @layer base {
@@ -155,11 +155,11 @@
 
   .dark .gradient-mesh {
     background: 
-      radial-gradient(at 27% 37%, oklch(0.05 0 0 / 0.5) 0px, transparent 50%),  /* invert(0.95) */
-      radial-gradient(at 97% 21%, oklch(0.04 0 0 / 0.4) 0px, transparent 50%),  /* invert(0.96) */
-      radial-gradient(at 52% 99%, oklch(0.06 0 0 / 0.5) 0px, transparent 50%),  /* invert(0.94) */
-      radial-gradient(at 10% 29%, oklch(0.03 0 0 / 0.3) 0px, transparent 50%),  /* invert(0.97) */
-      radial-gradient(at 97% 96%, oklch(0.05 0 0 / 0.4) 0px, transparent 50%);  /* invert(0.95) */
+      radial-gradient(at 27% 37%, oklch(0.32 0 0 / 0.5) 0px, transparent 50%),  /* softer */
+      radial-gradient(at 97% 21%, oklch(0.31 0 0 / 0.4) 0px, transparent 50%),  /* softer */
+      radial-gradient(at 52% 99%, oklch(0.34 0 0 / 0.5) 0px, transparent 50%),  /* softer */
+      radial-gradient(at 10% 29%, oklch(0.30 0 0 / 0.3) 0px, transparent 50%),  /* softer */
+      radial-gradient(at 97% 96%, oklch(0.32 0 0 / 0.4) 0px, transparent 50%);  /* softer */
   }
   
   .smooth-transition {
@@ -278,10 +278,10 @@ nextjs-portal {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(at 20% 15%, oklch(0.23 0.05 115 / 0.12) 0px, transparent 45%), /* invert(0.77) */
-    radial-gradient(at 85% 10%, oklch(0.17 0.04 118 / 0.10) 0px, transparent 50%), /* invert(0.83) */
-    radial-gradient(at 10% 85%, oklch(0.35 0.05 122 / 0.09) 0px, transparent 55%), /* invert(0.65) */
-    radial-gradient(at 90% 85%, oklch(0.40 0.05 123 / 0.08) 0px, transparent 55%); /* invert(0.60) */
+    radial-gradient(at 20% 15%, oklch(0.48 0.05 115 / 0.12) 0px, transparent 45%), /* softer */
+    radial-gradient(at 85% 10%, oklch(0.45 0.04 118 / 0.10) 0px, transparent 50%), /* softer */
+    radial-gradient(at 10% 85%, oklch(0.55 0.05 122 / 0.09) 0px, transparent 55%), /* softer */
+    radial-gradient(at 90% 85%, oklch(0.60 0.05 123 / 0.08) 0px, transparent 55%); /* softer */
 }
 
 /* Pill-styled sidebar container */
