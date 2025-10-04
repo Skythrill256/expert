@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import AgeVerification from "@/components/onboarding/AgeVerification";
@@ -35,7 +35,8 @@ interface UserData {
   fertility_goal: string | null;
 }
 
-export default function Onboarding() {
+// Extracted component that uses useSearchParams
+function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = useSession();
@@ -61,9 +62,9 @@ export default function Onboarding() {
       career_status: "",
       family_pledge: "",
       tight_clothing: false,
-      hot_baths: false
+      hot_baths: false,
     },
-    fertility_goal: null
+    fertility_goal: null,
   });
 
   useEffect(() => {
@@ -80,18 +81,16 @@ export default function Onboarding() {
   useEffect(() => {
     async function checkOnboarding() {
       if (!session?.user) return;
-      
+
       // Check if user is editing their profile
-      const isEditing = searchParams.get('edit') === 'true';
-      
+      const isEditing = searchParams.get("edit") === "true";
+
       if (isEditing) {
-        // Load existing profile data for editing
         try {
           const response = await fetch("/api/onboarding");
           if (response.ok) {
             const data = await response.json();
             if (data.profile) {
-              // Populate form with existing data
               setUserData({
                 age: data.profile.age,
                 height_feet: data.profile.heightFeet,
@@ -111,9 +110,9 @@ export default function Onboarding() {
                   career_status: data.profile.careerStatus || "",
                   family_pledge: data.profile.familyPledge || "",
                   tight_clothing: data.profile.tightClothing || false,
-                  hot_baths: data.profile.hotBaths || false
+                  hot_baths: data.profile.hotBaths || false,
                 },
-                fertility_goal: data.profile.fertilityGoal
+                fertility_goal: data.profile.fertilityGoal,
               });
             }
           }
@@ -122,7 +121,7 @@ export default function Onboarding() {
         }
         return;
       }
-      
+
       // If not editing, check if already completed and redirect
       try {
         const response = await fetch("/api/onboarding");
@@ -136,7 +135,7 @@ export default function Onboarding() {
         console.error("Error checking onboarding status:", error);
       }
     }
-    
+
     if (session) {
       checkOnboarding();
     }
@@ -153,11 +152,8 @@ export default function Onboarding() {
 
   const handleComplete = async (data: any) => {
     try {
-      // Merge the final step data with existing userData
       const finalData = { ...userData, ...data };
-      
-      console.log("Submitting onboarding data:", finalData);
-      
+
       const response = await fetch("/api/onboarding", {
         method: "POST",
         headers: {
@@ -216,31 +212,36 @@ export default function Onboarding() {
               <div
                 key={i}
                 className={`flex-1 h-1.5 rounded-full mx-1 transition-all duration-500 ${
-                  i <= step ? 'bg-primary' : 'bg-muted/50'
+                  i <= step ? "bg-primary" : "bg-muted/50"
                 }`}
               />
             ))}
           </div>
-          <p className="text-muted-foreground text-xs md:text-sm text-center font-medium">Step {step} of 3</p>
+          <p className="text-muted-foreground text-xs md:text-sm text-center font-medium">
+            Step {step} of 3
+          </p>
         </div>
 
         {/* Step content */}
-        <div className="glass-card rounded-3xl p-6 md:p-8 shadow-xl border animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <div
+          className="glass-card rounded-3xl p-6 md:p-8 shadow-xl border animate-fade-in"
+          style={{ animationDelay: "0.1s" }}
+        >
           {step === 1 && (
-            <AgeVerification 
+            <AgeVerification
               onNext={handleNext}
               initialData={{
                 age: userData.age,
                 height_feet: userData.height_feet,
                 height_inches: userData.height_inches,
                 weight: userData.weight,
-                profile_photo: userData.profile_photo
+                profile_photo: userData.profile_photo,
               }}
             />
           )}
           {step === 2 && (
-            <FertilityGoal 
-              onNext={handleNext} 
+            <FertilityGoal
+              onNext={handleNext}
               onBack={handleBack}
               initialData={userData.fertility_goal}
             />
@@ -255,5 +256,14 @@ export default function Onboarding() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Export with Suspense wrapper
+export default function Onboarding() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OnboardingInner />
+    </Suspense>
   );
 }
