@@ -37,7 +37,7 @@ export default function FloatingActionButton() {
                   className="flex items-center gap-3 glass-card px-4 py-3 rounded-full hover-lift group"
                   onClick={() => setIsOpen(false)}
                 >
-                  <span className="text-sm font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 smooth-transition">
+                  <span className={`text-sm font-medium whitespace-nowrap smooth-transition ${isOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} text-muted-foreground dark:text-white`}> 
                     {action.label}
                   </span>
                   <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${action.color} flex items-center justify-center`}>
@@ -60,7 +60,7 @@ export default function FloatingActionButton() {
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Plus className="w-6 h-6" />
+          <Plus className="w-6 h-6 text-white dark:text-black" />
         </motion.div>
       </motion.button>
     </div>

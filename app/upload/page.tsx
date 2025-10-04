@@ -3,84 +3,13 @@
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import PageLayout from "@/components/PageLayout";
-import { Upload, FileText, Plus, X, CheckCircle, AlertCircle, Salad, CigaretteOff, WineOff, Dumbbell, BedDouble, Shirt } from "lucide-react";
+import { Upload, FileText, Plus, X, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-
-// Lifestyle questions with multiple choice options
-const lifestyleQuestions = [
-  { 
-    key: 'healthyEating', 
-    question: 'How would you describe your diet today?', 
-    icon: <Salad className="w-5 h-5" />,
-    options: [
-      { label: 'Excellent - All healthy meals', value: 'excellent', score: 2 },
-      { label: 'Good - Mostly healthy', value: 'good', score: 1.5 },
-      { label: 'Fair - Some healthy choices', value: 'fair', score: 1 },
-      { label: 'Poor - Unhealthy meals', value: 'poor', score: 0 }
-    ]
-  },
-  { 
-    key: 'smoking', 
-    question: 'Did you smoke today?', 
-    icon: <CigaretteOff className="w-5 h-5" />,
-    options: [
-      { label: 'No, I don\'t smoke', value: 'never', score: 2 },
-      { label: 'No, but I usually do', value: 'skipped', score: 1.5 },
-      { label: 'Yes, less than usual', value: 'reduced', score: 0.5 },
-      { label: 'Yes, normal amount', value: 'normal', score: 0 }
-    ]
-  },
-  { 
-    key: 'alcohol', 
-    question: 'Did you consume alcohol today?', 
-    icon: <WineOff className="w-5 h-5" />,
-    options: [
-      { label: 'No alcohol', value: 'none', score: 2 },
-      { label: '1 drink', value: 'light', score: 1.5 },
-      { label: '2-3 drinks', value: 'moderate', score: 0.5 },
-      { label: '4+ drinks', value: 'heavy', score: 0 }
-    ]
-  },
-  { 
-    key: 'exercise', 
-    question: 'How much did you exercise today?', 
-    icon: <Dumbbell className="w-5 h-5" />,
-    options: [
-      { label: '60+ minutes', value: 'intense', score: 2 },
-      { label: '30-60 minutes', value: 'moderate', score: 1.5 },
-      { label: '10-30 minutes', value: 'light', score: 1 },
-      { label: 'No exercise', value: 'none', score: 0 }
-    ]
-  },
-  { 
-    key: 'sleep', 
-    question: 'How many hours did you sleep last night?', 
-    icon: <BedDouble className="w-5 h-5" />,
-    options: [
-      { label: '7-9 hours (Optimal)', value: 'optimal', score: 2 },
-      { label: '6-7 hours (Good)', value: 'good', score: 1.5 },
-      { label: '5-6 hours (Fair)', value: 'fair', score: 0.5 },
-      { label: 'Less than 5 hours', value: 'poor', score: 0 }
-    ]
-  },
-  { 
-    key: 'underwear', 
-    question: 'What type of underwear are you wearing?', 
-    icon: <Shirt className="w-5 h-5" />,
-    options: [
-      { label: 'Loose boxers', value: 'loose', score: 2 },
-      { label: 'Regular boxers', value: 'moderate', score: 1.5 },
-      { label: 'Briefs', value: 'briefs', score: 0.5 },
-      { label: 'Tight/restrictive', value: 'tight', score: 0 }
-    ]
-  },
-];
 
 export default function UploadPage() {
   const [mounted, setMounted] = useState(false);
@@ -97,16 +26,6 @@ export default function UploadPage() {
     volume: "",
     ph: "",
     dfi: "",
-  });
-
-  // Lifestyle data state - now supports string values for multiple choice
-  const [lifestyleData, setLifestyleData] = useState<Record<string, string | null>>({
-    healthyEating: null,
-    smoking: null,
-    alcohol: null,
-    exercise: null,
-    sleep: null,
-    underwear: null,
   });
 
   useEffect(() => {
@@ -132,20 +51,12 @@ export default function UploadPage() {
   const handleFileUpload = async () => {
     if (!selectedFile) return;
 
-    // Validate lifestyle questions are answered
-    const unansweredQuestions = Object.entries(lifestyleData).filter(([_, value]) => value === null);
-    if (unansweredQuestions.length > 0) {
-      toast.error("Please answer all lifestyle questions before uploading");
-      return;
-    }
-
     setUploading(true);
     const loadingToast = toast.loading("Analyzing report with AI...");
     
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("reportDate", manualData.reportDate);
-    formData.append("lifestyleData", JSON.stringify(lifestyleData));
 
     try {
       const response = await fetch("/api/reports", {
@@ -175,13 +86,6 @@ export default function UploadPage() {
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate lifestyle questions are answered
-    const unansweredQuestions = Object.entries(lifestyleData).filter(([_, value]) => value === null);
-    if (unansweredQuestions.length > 0) {
-      toast.error("Please answer all lifestyle questions before submitting");
-      return;
-    }
-
     setUploading(true);
 
     // Create synthetic PDF text for manual entry
@@ -205,7 +109,6 @@ DFI: ${manualData.dfi}%
     const formData = new FormData();
     formData.append("file", file);
     formData.append("reportDate", manualData.reportDate);
-    formData.append("lifestyleData", JSON.stringify(lifestyleData));
 
     try {
       const response = await fetch("/api/reports", {
@@ -239,71 +142,11 @@ DFI: ${manualData.dfi}%
         <div className="mb-6 sm:mb-8 animate-fade-in pl-12 sm:pl-0">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2">Upload Lab Report</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            Add your latest sperm analysis results and answer lifestyle questions
+            Add your latest sperm analysis results - track lifestyle factors separately in Daily Logs
           </p>
         </div>
 
         <div className="max-w-5xl mx-auto px-3 sm:px-0">
-          {/* Lifestyle Questions Section */}
-          <div className="glass-card rounded-2xl p-5 sm:p-8 border border-border/50 mb-6 sm:mb-8 animate-fade-in">
-            <div className="mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold mb-2">Lifestyle Questions</h2>
-              <p className="text-muted-foreground text-xs sm:text-sm">
-                Answer these quick questions to help our AI provide personalized recommendations
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              {lifestyleQuestions.map((question) => {
-                const selectedValue = lifestyleData[question.key as keyof typeof lifestyleData];
-                return (
-                  <div key={question.key} className="glass-card rounded-2xl p-4 sm:p-5 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                        {question.icon}
-                      </div>
-                      <Label className="font-semibold text-sm sm:text-base">{question.question}</Label>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {question.options.map((option, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setLifestyleData({ 
-                            ...lifestyleData, 
-                            [question.key]: option.value 
-                          })}
-                          className={cn(
-                            "relative py-4 px-4 rounded-xl border-2 transition-all font-medium text-sm text-left group hover-lift",
-                            selectedValue === option.value
-                              ? "border-primary bg-primary/10 text-primary shadow-lg"
-                              : "border-border/50 hover:border-primary/30 hover:bg-primary/5"
-                          )}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span>{option.label}</span>
-                            {selectedValue === option.value && (
-                              <CheckCircle className="w-5 h-5 text-primary" />
-                            )}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Progress indicator */}
-            <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Questions answered:</span>
-                <span className="font-bold text-primary">
-                  {Object.values(lifestyleData).filter(v => v !== null).length} / {lifestyleQuestions.length}
-                </span>
-              </div>
-            </div>
-          </div>
           <Tabs defaultValue="upload" className="w-full">
             <TabsList className="grid w-full grid-cols-2 glass-card mb-8 p-1">
               <TabsTrigger value="upload" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">

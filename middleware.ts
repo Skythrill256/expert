@@ -5,6 +5,9 @@ import { NextResponse } from 'next/server';
 const isPublicRoute = createRouteMatcher([
   '/api/share/view(.*)',  // Public endpoint for viewing shared data
   '/shared(.*)',          // Public shared view pages
+  '/login(.*)',
+  '/register(.*)',
+  '/sign-in(.*)',
 ]);
 
 // Define protected routes
@@ -13,12 +16,16 @@ const isProtectedRoute = createRouteMatcher([
   '/recommendations(.*)',
   '/settings(.*)',
   '/upload(.*)',
+  '/profile(.*)',
+  '/onboarding(.*)',
   '/api/dashboard(.*)',
   '/api/recommendations(.*)',
   '/api/reports(.*)',
   '/api/user(.*)',
   '/api/share(.*)',       // Protected: creating/managing share links
   '/api/export(.*)',
+  '/api/lifestyle(.*)',
+  '/api/onboarding(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

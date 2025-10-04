@@ -87,7 +87,7 @@
   /* Dark Mode = exact inversion of Light Mode values */
   --background: oklch(0.0 0 0);  /* invert(1.00) */
   --foreground: oklch(1.0 0 0);  /* invert(0.00) */
-  --card: oklch(0.02 0 0);       /* invert(0.98) */
+  --card: oklch(0.14 0 0);       /* slightly darker (less grey) dark-mode card */
   --card-foreground: oklch(1.0 0 0);
   --popover: oklch(0.0 0 0);     /* invert(1.00) */
   --popover-foreground: oklch(1.0 0 0);
@@ -328,4 +328,29 @@ nextjs-portal {
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
 }

@@ -66,7 +66,7 @@ export default function RegisterPage() {
             }}
             routing="hash"
             signInUrl="/login"
-            forceRedirectUrl="/dashboard"
+            forceRedirectUrl="/onboarding"
           />
         </div>
 

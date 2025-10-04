@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Upload, TrendingUp, Settings, Menu, X, LogOut, Share2, Moon, Sun } from "lucide-react";
+import { Home, Upload, TrendingUp, Settings, Menu, X, LogOut, Share2, Moon, Sun, User, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,14 +9,17 @@ import { cn } from "@/lib/utils";
 import { useAuth, useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/components/SidebarContext";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
+  { name: "Daily Logs", href: "/daily-logs", icon: Calendar },
   { name: "Upload Report", href: "/upload", icon: Upload },
   { name: "Recommendations", href: "/recommendations", icon: TrendingUp },
+  { name: "Profile", href: "/profile", icon: User },
   { name: "Share with Doctor", href: "/share", icon: Share2 },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
@@ -119,41 +122,39 @@ export default function Sidebar() {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    // Refined nav items with better proportions
-                    "flex items-center smooth-transition group relative overflow-hidden focus-ring",
-                    isActive
-                      ? "bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
-                      : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground",
-                    // Mobile: balanced touch targets
-                    "px-4 py-3 gap-3 rounded-xl text-sm font-medium",
-                    // Desktop: conditional styling based on collapse state
-                    isCollapsed 
-                      ? "lg:justify-center lg:h-10 lg:w-10 lg:rounded-full lg:px-0 lg:gap-0 lg:mx-auto lg:text-sm lg:font-medium" 
-                      : "lg:px-5 lg:py-2.5 lg:gap-3 lg:rounded-full lg:text-sm lg:font-medium"
-                  )}
-                >
-                  <Icon className="w-5 h-5 shrink-0" />
-                  {/* Always show text on mobile, conditionally on desktop */}
-                  <span className={cn(
-                    "whitespace-nowrap",
-                    isCollapsed && "lg:hidden"
-                  )}>
-                    {item.name}
-                  </span>
-                  
-                  {/* Tooltip for collapsed state on desktop only */}
+                <Tooltip key={item.name}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        // Refined nav items with better proportions
+                        "flex items-center smooth-transition group relative overflow-hidden focus-ring",
+                        isActive
+                          ? "bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
+                          : "text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground",
+                        // Mobile: balanced touch targets
+                        "px-4 py-3 gap-3 rounded-xl text-sm font-medium",
+                        // Desktop: conditional styling based on collapse state
+                        isCollapsed 
+                          ? "lg:justify-center lg:h-10 lg:w-10 lg:rounded-full lg:px-0 lg:gap-0 lg:mx-auto lg:text-sm lg:font-medium" 
+                          : "lg:px-5 lg:py-2.5 lg:gap-3 lg:rounded-full lg:text-sm lg:font-medium"
+                      )}
+                    >
+                      <Icon className="w-5 h-5 shrink-0" />
+                      {/* Always show text on mobile, conditionally on desktop */}
+                      <span className={cn(
+                        "whitespace-nowrap",
+                        isCollapsed && "lg:hidden"
+                      )}>
+                        {item.name}
+                      </span>
+                    </Link>
+                  </TooltipTrigger>
                   {isCollapsed && (
-                    <span className="hidden lg:block absolute left-full ml-4 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 shadow-xl border border-border pointer-events-none">
-                      {item.name}
-                      <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-popover" />
-                    </span>
+                    <TooltipContent sideOffset={10}>{item.name}</TooltipContent>
                   )}
-                </Link>
+                </Tooltip>
               );
             })}
           </nav>
@@ -168,13 +169,16 @@ export default function Sidebar() {
               <Button
                 variant="outline"
                 className={cn(
-                  "w-full hover:bg-accent/60 border-border/50 rounded-xl",
+                  "hover:bg-accent/60 border-border/50 rounded-full",
                   // Mobile: balanced proportions
-                  "h-10 px-4 gap-3 text-sm font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
+                  "h-10 px-4 gap-3 text-sm font-medium",
                   // Mobile: always show text with proper layout
                   "flex items-center justify-start",
                   // Desktop: conditional styling based on collapse state
-                  isCollapsed && "lg:justify-center lg:px-0 lg:gap-0 lg:rounded-full"
+                  isCollapsed 
+                    ? "lg:w-10 lg:h-10 lg:p-0 lg:justify-center lg:gap-0" 
+                    : "lg:w-full lg:h-10 lg:px-4 lg:gap-3",
+                  !isCollapsed && "w-full"
                 )}
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
@@ -253,13 +257,16 @@ export default function Sidebar() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 border-border/50 smooth-transition rounded-xl",
+                      "hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 border-border/50 smooth-transition rounded-full",
                       // Mobile: balanced proportions
-                      "h-10 px-4 gap-3 text-sm font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
+                      "h-10 px-4 gap-3 text-sm font-medium",
                       // Mobile: always show text with proper layout
                       "flex items-center justify-start",
                       // Desktop: conditional styling based on collapse state
-                      isCollapsed && "lg:justify-center lg:px-0 lg:gap-0 lg:rounded-full"
+                      isCollapsed 
+                        ? "lg:w-10 lg:h-10 lg:p-0 lg:justify-center lg:gap-0" 
+                        : "lg:w-full lg:h-10 lg:px-4 lg:gap-3",
+                      !isCollapsed && "w-full"
                     )}
                     onClick={handleSignOut}
                   >
@@ -286,13 +293,16 @@ export default function Sidebar() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full hover:bg-accent/50 border-border/50 rounded-xl",
+                    "hover:bg-accent/50 border-border/50 rounded-full",
                     // Mobile: balanced proportions
-                    "h-10 px-4 gap-3 text-sm font-medium lg:h-10 lg:px-4 lg:gap-3 lg:text-sm lg:font-medium",
+                    "h-10 px-4 gap-3 text-sm font-medium",
                     // Mobile: always show text with proper layout
                     "flex items-center justify-start",
                     // Desktop: conditional styling based on collapse state
-                    isCollapsed && "lg:justify-center lg:px-0 lg:gap-0 lg:rounded-full"
+                    isCollapsed 
+                      ? "lg:w-10 lg:h-10 lg:p-0 lg:justify-center lg:gap-0" 
+                      : "lg:w-full lg:h-10 lg:px-4 lg:gap-3",
+                    !isCollapsed && "w-full"
                   )}
                   onClick={() => router.push("/login")}
                 >

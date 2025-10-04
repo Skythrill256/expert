@@ -58,6 +58,29 @@ export default function DashboardPage() {
     setMounted(true);
   }, []);
 
+  // Check onboarding status
+  useEffect(() => {
+    async function checkOnboarding() {
+      if (!session?.user) return;
+      
+      try {
+        const response = await fetch("/api/onboarding");
+        if (response.ok) {
+          const data = await response.json();
+          if (!data.completed) {
+            router.push("/onboarding");
+          }
+        }
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
+      }
+    }
+    
+    if (session) {
+      checkOnboarding();
+    }
+  }, [session, router]);
+
   useEffect(() => {
     let isMounted = true;
     let retryTimeout: NodeJS.Timeout;

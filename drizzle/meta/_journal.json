@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1759510037495,
+      "tag": "0000_high_shooting_star",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1759513900452,
+      "tag": "0001_romantic_betty_brant",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1759545196370,
+      "tag": "0002_light_nicolaos",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1759547373927,
+      "tag": "0003_fine_kingpin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1759549228497,
+      "tag": "0004_smooth_lily_hollister",
+      "breakpoints": true
+    }
+  ]
+}

@@ -43,6 +43,42 @@ export const shareLinks = sqliteTable('share_links', {
 });
 
 // Application tables
+export const userProfile = sqliteTable('user_profile', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().unique(), // Removed foreign key constraint for Clerk compatibility
+  // Basic Info
+  age: integer('age'),
+  heightFeet: integer('height_feet'),
+  heightInches: integer('height_inches'),
+  weight: integer('weight'),
+  profilePhoto: text('profile_photo'),
+  
+  // Fertility Goal
+  fertilityGoal: text('fertility_goal'), // 'optimize', 'freeze', 'donate', 'conceive', 'maintain'
+  
+  // Lifestyle Data
+  smoking: text('smoking'), // 'never', 'occasionally', 'regularly', 'quit'
+  alcohol: text('alcohol'), // 'none', 'light', 'moderate', 'heavy'
+  exercise: text('exercise'), // 'sedentary', 'light', 'moderate', 'intense'
+  dietQuality: text('diet_quality'), // 'poor', 'average', 'good', 'excellent'
+  sleepHours: real('sleep_hours'),
+  stressLevel: text('stress_level'), // 'low', 'moderate', 'high', 'extreme'
+  masturbationFrequency: text('masturbation_frequency'), // 'none', '1-2', '3-5', '6-10', '11+'
+  sexualActivity: text('sexual_activity'), // 'none', '1-2', '3-5', '6+'
+  supplements: text('supplements'), // 'none', 'basic', 'fertility', 'comprehensive'
+  careerStatus: text('career_status'), // 'student', 'entry', 'mid', 'senior', 'entrepreneur', 'unemployed'
+  familyPledge: text('family_pledge'), // '0', 'up-to-2', 'up-to-5', 'up-to-10'
+  tightClothing: integer('tight_clothing', { mode: 'boolean' }).default(false),
+  hotBaths: integer('hot_baths', { mode: 'boolean' }).default(false),
+  
+  // Completion Status
+  onboardingCompleted: integer('onboarding_completed', { mode: 'boolean' }).default(false).notNull(),
+  
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+});
+
+// Legacy table - kept for backwards compatibility
 export const onboardingData = sqliteTable('onboarding_data', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
@@ -79,14 +115,20 @@ export const lifestyleLogs = sqliteTable('lifestyle_logs', {
   id: text('id').primaryKey(),
   userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
   logDate: text('log_date').notNull(),
+  
+  // Detailed lifestyle tracking fields
+  masturbationCount: integer('masturbation_count'), // 0, 1, 2, 3+
+  sleepQuality: text('sleep_quality'), // 'excellent', 'good', 'fair', 'poor'
   sleepHours: real('sleep_hours'),
+  dietQuality: text('diet_quality'), // 'excellent', 'good', 'average', 'poor'
+  stressLevel: text('stress_level'), // 'low', 'moderate', 'high', 'extreme'
   exerciseMinutes: integer('exercise_minutes'),
-  dietQuality: text('diet_quality'),
-  stressLevel: text('stress_level'),
+  electrolytes: integer('electrolytes', { mode: 'boolean' }),
+  notes: text('notes'),
+  
+  // Legacy fields (keep for backwards compatibility)
   smoking: integer('smoking', { mode: 'boolean' }),
   alcoholDrinks: integer('alcohol_drinks'),
-  notes: text('notes'),
-  // Simplified quick check fields
   healthyEating: integer('healthy_eating', { mode: 'boolean' }),
   noSmoking: integer('no_smoking', { mode: 'boolean' }),
   noAlcohol: integer('no_alcohol', { mode: 'boolean' }),
@@ -94,7 +136,9 @@ export const lifestyleLogs = sqliteTable('lifestyle_logs', {
   goodSleep: integer('good_sleep', { mode: 'boolean' }),
   looseUnderwear: integer('loose_underwear', { mode: 'boolean' }),
   dailyPoints: integer('daily_points'),
+  
   createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').$defaultFn(() => new Date().toISOString()),
 });
 
 export const recommendations = sqliteTable('recommendations', {

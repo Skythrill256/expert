@@ -63,7 +63,7 @@ export default function LoginPage() {
             }}
             routing="hash"
             signUpUrl="/register"
-            forceRedirectUrl="/dashboard"
+            forceRedirectUrl="/onboarding"
           />
         </div>
 
