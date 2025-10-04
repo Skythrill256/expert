@@ -48,9 +48,9 @@
 :root {
   --radius: 1rem;
   /* Minimalist Black & White Light Mode */
-  --background: oklch(1.0 0 0);  /* #FFFFFF - Pure white background */
+  --background: oklch(0.98 0 0);  /* #FAFAFA - Very light gray for background */
   --foreground: oklch(0.0 0 0);  /* #000000 - Pure black text */
-  --card: oklch(0.98 0 0);  /* #FAFAFA - Very light gray for cards */
+  --card: oklch(1.0 0 0);  /* #FFFFFF - Pure white for cards */
   --card-foreground: oklch(0.0 0 0);  /* #000000 */
   --popover: oklch(1.0 0 0);  /* #FFFFFF */
   --popover-foreground: oklch(0.0 0 0);  /* #000000 */
@@ -85,9 +85,9 @@
 
 .dark {
   /* Dark Mode = exact inversion of Light Mode values */
-  --background: oklch(0.0 0 0);  /* invert(1.00) */
+  --background: oklch(0.14 0 0);  /* slightly darker gray for background */
   --foreground: oklch(1.0 0 0);  /* invert(0.00) */
-  --card: oklch(0.14 0 0);       /* slightly darker (less grey) dark-mode card */
+  --card: oklch(0.0 0 0);       /* pure black for cards */
   --card-foreground: oklch(1.0 0 0);
   --popover: oklch(0.0 0 0);     /* invert(1.00) */
   --popover-foreground: oklch(1.0 0 0);
